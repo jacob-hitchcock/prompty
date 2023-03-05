@@ -1,6 +1,6 @@
-# Lingua: Connecting Distant Immigrant Families
+# Prompty: Connecting Distant Immigrant Families
 
-Lingua is an Informatics Capstone Project aimed at addressing the acculturation gap and cultivating relationships between distant immigrant families. Our goal is to provide a convenient way for families to preserve and share aspects of their life, language, and tradition with one another, despite living far away from each other.
+Prompty is an Informatics Capstone Project aimed at addressing the acculturation gap and cultivating relationships between distant immigrant families. Our goal is to provide a convenient way for families to preserve and share aspects of their life, language, and tradition with one another, despite living far away from each other.
 
 ## The Problem
 
@@ -8,7 +8,7 @@ Generations of immigrant families have become disconnected due to the distance b
 
 ## Our Solution
 
-Our solution is a platform that helps immigrant families connect and preserve their traditions and culture. Lingua provides containers and prompts of ideas for what you can share so you and your family can grow your connections. With our platform, families can easily share their memories, recipes, songs, and more. They can even store family photos and videos in one convenient location. Our platform is designed to be intuitive and easy to use, even for those who are not tech-savvy.
+Our solution is a platform that helps immigrant families connect and preserve their traditions and culture. Prompty provides containers and prompts of ideas for what you can share so you and your family can grow your connections. With our platform, families can easily share their memories, recipes, songs, and more. They can even store family photos and videos in one convenient location. Our platform is designed to be intuitive and easy to use, even for those who are not tech-savvy.
 
 ## Project Members
 
