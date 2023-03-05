@@ -1,20 +1,45 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator,TransitionPresets } from '@react-navigation/stack';
+import Onboarding from './src/components/Onboard';
+import Login from './src/components/Login';
+import Register from './src/components/Register';
+import Forgot from './src/components/Forgot';
+import Account from './src/components/Account';
+import Chats from './src/components/Chats';
+import Contacts from './src/components/Contacts';
 
-export default function App() {
+// Assists with app navigation
+const Stack = createStackNavigator();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        <Stack.Screen name="Onboarding" component={Onboarding} />
+        <Stack.Screen name="Login" component={Login} options={{
+          ...TransitionPresets.ScaleFromCenterAndroid,
+        }} />
+        <Stack.Screen name="Register" component={Register} options={{
+          ...TransitionPresets.ModalTransition,
+        }} />
+        <Stack.Screen name="Forgot" component={Forgot} />
+        <Stack.Screen name="Account" component={Account} options={{
+          ...TransitionPresets.ScaleFromCenterAndroid,
+        }} />
+        <Stack.Screen name="Chats" component={Chats} options={{
+          ...TransitionPresets.ModalFadeTransition,
+        }} />
+        <Stack.Screen name="Contacts" component={Contacts} options={{
+          ...TransitionPresets.ModalFadeTransition,
+        }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
