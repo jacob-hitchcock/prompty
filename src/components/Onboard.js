@@ -1,6 +1,5 @@
 import React,{ useState } from 'react';
 import { StyleSheet,View,Text,Image,TouchableOpacity,ImageBackground } from 'react-native';
-import Svg,{ Circle } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
 import Lottie from 'lottie-react-native';
 

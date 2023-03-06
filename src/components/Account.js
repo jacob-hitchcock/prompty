@@ -29,7 +29,7 @@ const Account = () => {
             <View style={styles.accountContainer}>
                 <ImageBackground source={require('../../assets/background.png')} style={styles.background}>
                     <View style={styles.infoContainer}>
-                        <Image source={require('../../assets/portrait.jpeg')} style={styles.profilePicture} />
+                        <Image source={require('../../assets/placeholder.png')} style={styles.profilePicture} />
                         {isEditingName ? (
                             <TextInput
                                 style={styles.editableText}
