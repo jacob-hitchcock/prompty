@@ -73,6 +73,7 @@ const Login = () => {
                     <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
                         <Text style={styles.buttonText}>Sign In</Text>
                     </TouchableOpacity>
+                    {/* In the furture, more sign-in options will be here */}
                     <TouchableOpacity style={styles.registerContainer} onPress={handleRegisterPress}>
                         <Text style={styles.register}>New to Prompty? <Text style={styles.registerLink}>Join Now</Text></Text>
                     </TouchableOpacity>

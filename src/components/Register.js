@@ -30,8 +30,14 @@ const Register = () => {
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
+                            placeholder='Name'
+                            placeholderTextColor='#878787'
+                        />
+                        <TextInput
+                            style={styles.input}
                             placeholder='Email'
                             placeholderTextColor='#878787'
+                            keyboardType='email-address'
                         />
                         <View style={{ position: 'relative' }}>
                             <TextInput
@@ -71,6 +77,7 @@ const styles = {
     formWrapper: {
         width: '80%',
         alignItems: 'center',
+        marginTop: -50,
     },
     background: {
         flex: 1,
@@ -113,7 +120,7 @@ const styles = {
         backgroundColor: '#23356F',
         padding: 10,
         borderRadius: 5,
-        marginTop: 75,
+        marginTop: 35,
         width: '100%',
         height: 57,
         justifyContent: 'center',
