@@ -75,6 +75,7 @@ const styles = {
         height: 57,
         backgroundColor: 'white',
         borderRadius: 10,
+        color: '#23356F',
     },
     button: {
         backgroundColor: '#23356F',

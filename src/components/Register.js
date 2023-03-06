@@ -102,6 +102,7 @@ const styles = {
         height: 57,
         backgroundColor: 'white',
         borderRadius: 10,
+        color: '#23356F',
     },
     password: {
         color: '#23356F',
