@@ -3,27 +3,37 @@ import { View,Text,TextInput,TouchableOpacity,ImageBackground,Image } from 'reac
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
+// Defines the login components
 const Login = () => {
+    // Handles navigation
     const navigation = useNavigation();
 
-    const handleRegisterPress = () => {
-        navigation.navigate('Register');
-    };
-
-    const handleForgotPress = () => {
-        navigation.navigate('Forgot');
-    };
-
-    const [showPassword,setShowPassword] = useState(false);
-
-    const handleTogglePassword = () => {
-        setShowPassword(!showPassword);
-    };
-
+    // Navigate to the Account page when the Login button is pressed
+    // Probably change this to navigate somewhere else in the future
     const handleLoginPress = () => {
         navigation.navigate('Account');
     }
 
+    // Navigate to the Register page when the register button is pressed
+    const handleRegisterPress = () => {
+        navigation.navigate('Register');
+    };
+
+    // Navigate to Forgot Password page when button is pressed
+    const handleForgotPress = () => {
+        navigation.navigate('Forgot');
+    };
+
+    // Tracks state of password visibility
+    // Initial state: false, hiding password
+    const [showPassword,setShowPassword] = useState(false);
+
+    // Toggle password visibiility state when eyeball is pressed
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword);
+    };
+
+    // Component layout
     return (
         <View style={styles.formContainer}>
             <ImageBackground source={require('../../assets/background.png')} style={styles.background}>
@@ -35,8 +45,10 @@ const Login = () => {
                             style={styles.input}
                             placeholder='Email'
                             placeholderTextColor='#878787'
+                            keyboardType='email-address'
                         />
                         <View style={{ position: 'relative' }}>
+                            {/* Need to edit as password is covered by keyboard */}
                             <TextInput
                                 style={styles.input}
                                 placeholder='Password'
@@ -70,6 +82,7 @@ const Login = () => {
     );
 };
 
+// Component styling
 const styles = {
     formContainer: {
         flex: 1,
