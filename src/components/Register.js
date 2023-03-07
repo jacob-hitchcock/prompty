@@ -17,6 +17,7 @@ const Register = () => {
         setShowPassword(!showPassword);
     };
 
+    // Navigates to account page
     const handleRegisterPress = () => {
         navigation.navigate('Account');
     };
@@ -32,18 +33,25 @@ const Register = () => {
                             style={styles.input}
                             placeholder='Name'
                             placeholderTextColor='#878787'
+                            onSubmitEditing={() => { this.Email.focus(); }}
+                            blurOnSubmit={false}
                         />
                         <TextInput
                             style={styles.input}
                             placeholder='Email'
                             placeholderTextColor='#878787'
                             keyboardType='email-address'
+                            ref={(input) => { this.Email = input; }}
+                            onSubmitEditing={() => { this.Password.focus(); }}
+                            blurOnSubmit={false}
                         />
                         <View style={{ position: 'relative' }}>
                             <TextInput
                                 style={styles.input}
                                 placeholder='Password'
                                 placeholderTextColor='#878787'
+                                ref={(input) => { this.Password = input; }}
+                                blurOnSubmit={true}
                                 secureTextEntry={!showPassword}
                             />
                             <TouchableOpacity

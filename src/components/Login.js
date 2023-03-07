@@ -1,5 +1,5 @@
 import React,{ useState } from 'react';
-import { View,Text,TextInput,TouchableOpacity,ImageBackground,Image } from 'react-native';
+import { View,Text,TextInput,TouchableOpacity,ImageBackground,Image,KeyboardAvoidingView,TouchableWithoutFeedback,Keyboard } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
@@ -40,38 +40,50 @@ const Login = () => {
                 <View style={styles.formWrapper}>
                     <Text style={styles.title}>Welcome to Prompty!</Text>
                     <Image style={styles.image} source={require('../../assets/prompty.png')} />
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.input}
-                            placeholder='Email'
-                            placeholderTextColor='#878787'
-                            keyboardType='email-address'
-                        />
-                        <View style={{ position: 'relative' }}>
-                            {/* Need to edit as password is covered by keyboard */}
-                            <TextInput
-                                style={styles.input}
-                                placeholder='Password'
-                                placeholderTextColor='#878787'
-                                secureTextEntry={!showPassword}
-                            />
-                            <TouchableOpacity
-                                style={{ position: 'absolute',right: 10,top: 20 }}
-                                onPress={handleTogglePassword}
-                            >
-                                <Icon
-                                    name={showPassword ? 'eye' : 'eye-slash'}
-                                    size={20}
-                                    color='#878787'
+                    <KeyboardAvoidingView
+                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                        style={styles.innerContainer}>
+                        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder='Email'
+                                    placeholderTextColor='#878787'
+                                    keyboardType='email-address'
+                                    onSubmitEditing={() => { this.Password.focus(); }}
+                                    blurOnSubmit={false}
                                 />
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity onPress={handleForgotPress}>
-                            <Text style={styles.password}>Forgot password?</Text>
-                        </TouchableOpacity>
-                    </View>
+                                {/* Need to edit as password is covered by keyboard */}
+
+
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder='Password'
+                                    placeholderTextColor='#878787'
+                                    secureTextEntry={!showPassword}
+                                    ref={(input) => { this.Password = input; }}
+                                />
+                                <TouchableOpacity
+                                    style={{ position: 'absolute',right: 10,top: 97 }}
+                                    onPress={handleTogglePassword}
+                                >
+                                    <Icon
+                                        name={showPassword ? 'eye' : 'eye-slash'}
+                                        size={20}
+                                        color='#878787'
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={handleForgotPress}>
+                                    <Text style={styles.password}>Forgot password?</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </KeyboardAvoidingView>
                     <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
                         <Text style={styles.buttonText}>Sign In</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
+                        <Text style={styles.buttonText}>Firbase Sign In Options Will Go Here</Text>
                     </TouchableOpacity>
                     {/* In the furture, more sign-in options will be here */}
                     <TouchableOpacity style={styles.registerContainer} onPress={handleRegisterPress}>
@@ -89,7 +101,8 @@ const styles = {
         flex: 1,
     },
     formWrapper: {
-        width: '80%',
+        flex: 1,
+        width: '100%',
         alignItems: 'center',
     },
     background: {
@@ -97,6 +110,12 @@ const styles = {
         width: '100%',
         height: '100%',
         resizeMode: 'cover',
+        alignItems: 'center',
+    },
+    innerContainer: {
+        flex: 1,
+        width: '100%',
+        justifyContent: 'space-around',
         alignItems: 'center',
     },
     title: {
@@ -107,13 +126,12 @@ const styles = {
         marginTop: 150,
     },
     image: {
-        width: '70%',
+        width: '60%',
         height: 300,
         resizeMode: 'contain',
-        marginTop: -13,
     },
     inputContainer: {
-        width: '100%',
+        width: '80%',
     },
     input: {
         padding: 10,
@@ -128,13 +146,14 @@ const styles = {
         color: '#23356F',
         textAlign: 'right',
         marginTop: -10,
+        marginBottom: 40,
     },
     button: {
         backgroundColor: '#23356F',
         padding: 10,
         borderRadius: 5,
-        marginTop: 75,
-        width: '100%',
+        marginTop: 20,
+        width: '80%',
         height: 57,
         justifyContent: 'center',
     },
@@ -144,7 +163,7 @@ const styles = {
         fontSize: 18,
     },
     registerContainer: {
-        marginTop: 100,
+        marginTop: 50,
         marginBottom: 50,
     },
     register: {
