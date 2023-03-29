@@ -2,10 +2,28 @@ import React from 'react';
 import { StyleSheet,View,Text,ImageBackground,Image,TouchableOpacity,TextInput } from 'react-native';
 import Navbar from './Navbar';
 
+// Fake data for now
+ const peopleChats = {
+    "Person1": {},
+    "Person2": {},
+    "Person3": {},
+    "Person4": {},
+    "Person5": {},
+    "Person6": {}
+ };
+
+
+
+ const chatViews = Object.keys(peopleChats).map((current) => {
+    
+ });
+
+
 const Chats = () => {
     return (
         <View style={styles.container}>
-            <Text>Chat</Text>
+            <Text>Chats</Text>
+
             <Navbar />
         </View>
     )
