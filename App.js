@@ -10,6 +10,7 @@ import Account from './src/components/Account';
 import Chats from './src/components/Chats';
 import Contacts from './src/components/Contacts';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { authentication } from './firebase';
 
 // Assists with app navigation
 const Stack = createStackNavigator();
@@ -17,6 +18,8 @@ LogBox.ignoreAllLogs(true);
 
 const App = () => {
   const [firstTimeLaunched, setFirstTimeLaunched] = React.useState(null);
+  const [signedIn, setSignedIn] = useState(false);
+ 
 
   useEffect(() => {
     AsyncStorage.getItem('alreadyLaunched').then(value => {

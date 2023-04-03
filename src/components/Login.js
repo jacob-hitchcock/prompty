@@ -2,16 +2,33 @@ import React,{ useState } from 'react';
 import { View,Text,TextInput,TouchableOpacity,ImageBackground,Image,KeyboardAvoidingView,TouchableWithoutFeedback,Keyboard } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { authentication } from '../../firebase';
+
+
+
 
 // Defines the login components
 const Login = () => {
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [userInfo, setUserInfo] = useState([]);
+    const [email, setEmail] = useState(false);
+    const [password, setPassword] = useState('');
+
     // Handles navigation
     const navigation = useNavigation();
 
     // Navigate to the Account page when the Login button is pressed
     // Probably change this to navigate somewhere else in the future
     const handleLoginPress = () => {
-        navigation.navigate('Account');
+        signInWithEmailAndPassword(authentication, email, password)
+        .then((res) => {
+            console.log(res);
+            navigation.navigate('Account');
+        })
+        .catch((res) => {
+            console.log(res);
+        })
     }
 
     // Navigate to the Register page when the register button is pressed
@@ -52,6 +69,7 @@ const Login = () => {
                                     keyboardType='email-address'
                                     onSubmitEditing={() => { this.Password.focus(); }}
                                     blurOnSubmit={false}
+                                    onChangeText={text => setEmail(text)} 
                                 />
                                 {/* Need to edit as password is covered by keyboard */}
 
@@ -62,6 +80,7 @@ const Login = () => {
                                     placeholderTextColor='#878787'
                                     secureTextEntry={!showPassword}
                                     ref={(input) => { this.Password = input; }}
+                                    onChangeText={text => setPassword(text)} 
                                 />
                                 <TouchableOpacity
                                     style={{ position: 'absolute',right: 10,top: 97 }}
@@ -82,9 +101,8 @@ const Login = () => {
                     <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
                         <Text style={styles.buttonText}>Sign In</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
-                        <Text style={styles.buttonText}>Firbase Sign In Options Will Go Here</Text>
-                    </TouchableOpacity>
+                    
+                   
                     {/* In the furture, more sign-in options will be here */}
                     <TouchableOpacity style={styles.registerContainer} onPress={handleRegisterPress}>
                         <Text style={styles.register}>New to Prompty? <Text style={styles.registerLink}>Join Now</Text></Text>
@@ -95,6 +113,14 @@ const Login = () => {
     );
 };
 
+
+// temporarily moved this here and commented it out. Think we won't use other firebase options because they require making accounts
+// and doing many more steps (e.g. making an apple dev account and setting it up)
+// google sign in option might be easy
+/*  <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
+                        <Text style={styles.buttonText}>Firbase Sign In Options Will Go Here</Text>
+                    </TouchableOpacity>
+*/
 // Component styling
 const styles = {
     formContainer: {

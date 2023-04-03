@@ -2,9 +2,28 @@ import React,{ useState } from 'react';
 import { View,Text,TextInput,TouchableOpacity,ImageBackground,Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
+import { authentication } from '../../firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 
 const Register = () => {
+     // Handles login
+     const [email, setEmail] = useState('');
+     const [password, setPassword] = useState('');
+
+     const registerNewUser = () => {
+       createUserWithEmailAndPassword(authentication, email, password)
+       .then((res) => {
+        console.log(res);
+        //setSignedIn(true);
+        navigation.navigate('Account')
+       })
+       .catch((res) => {
+        console.log(res);
+       })
+     }
+
+
     const navigation = useNavigation();
 
     const handleLoginPress = () => {
@@ -15,11 +34,6 @@ const Register = () => {
 
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
-    };
-
-    // Navigates to account page
-    const handleRegisterPress = () => {
-        navigation.navigate('Account');
     };
 
     return (
@@ -44,6 +58,7 @@ const Register = () => {
                             ref={(input) => { this.Email = input; }}
                             onSubmitEditing={() => { this.Password.focus(); }}
                             blurOnSubmit={false}
+                            onChangeText={text => setEmail(text)} 
                         />
                         <View style={{ position: 'relative' }}>
                             <TextInput
@@ -53,6 +68,7 @@ const Register = () => {
                                 ref={(input) => { this.Password = input; }}
                                 blurOnSubmit={true}
                                 secureTextEntry={!showPassword}
+                                onChangeText={text => setPassword(text)} 
                             />
                             <TouchableOpacity
                                 style={{ position: 'absolute',right: 10,top: 20 }}
@@ -66,7 +82,7 @@ const Register = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <TouchableOpacity style={styles.button} onPress={handleRegisterPress}>
+                    <TouchableOpacity style={styles.button} onPress={registerNewUser}>
                         <Text style={styles.buttonText}>Register</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.loginContainer} onPress={handleLoginPress}>
