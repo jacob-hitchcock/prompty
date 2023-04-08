@@ -2,20 +2,43 @@ import React,{ useState } from 'react';
 import { View,Text,TextInput,TouchableOpacity,ImageBackground,Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-import { authentication } from '../../firebase';
+import { authentication, promptyDB } from '../../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-
+import { collection, setDoc, doc} from "firebase/firestore";
 
 const Register = () => {
      // Handles login
      const [email, setEmail] = useState('');
      const [password, setPassword] = useState('');
+     const [username, setUsername] = useState('');
 
+     async function addUserDoc(userID) {
+        try {
+            // gets a reference of the specific user document to be created
+                // will be in the prompty firestore DB, inside the "users"
+                // collection, and the ID for that document will be the same
+                // as the ID for the user
+            const userDocRef = doc(promptyDB, "users", userID); 
+            await setDoc(userDocRef,  {
+                email: email, 
+                username: username,
+                firstName: "",
+                lastName: "",
+                friendsList: [],
+                profilePictureUrl: ""
+                });    
+            console.log("Success adding document");
+        } catch(error) {
+            console.log("Error adding document: " + error);
+        }
+    }
+   
      const registerNewUser = () => {
        createUserWithEmailAndPassword(authentication, email, password)
        .then((res) => {
         console.log(res);
-        //setSignedIn(true);
+        const userID = res.user.uid;
+        addUserDoc(userID);
         navigation.navigate('Account')
        })
        .catch((res) => {
@@ -45,10 +68,11 @@ const Register = () => {
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            placeholder='Name'
+                            placeholder='Username'
                             placeholderTextColor='#878787'
                             onSubmitEditing={() => { this.Email.focus(); }}
                             blurOnSubmit={false}
+                            onChangeText={text => setUsername(text)}
                         />
                         <TextInput
                             style={styles.input}

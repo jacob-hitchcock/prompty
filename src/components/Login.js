@@ -3,9 +3,22 @@ import { View,Text,TextInput,TouchableOpacity,ImageBackground,Image,KeyboardAvoi
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { authentication } from '../../firebase';
+import { authentication, promptyDB } from '../../firebase';
+import { collection, addDoc } from "firebase/firestore";
 
-
+/*
+async function addUserDoc() {
+    console.log("hello");
+    try {
+        const docRef = await addDoc(collection(promptyDB, "users"), {
+            first: "test",
+            last: "test"
+        });
+        console.log("successful");
+    } catch(error) {
+        console.log("Error adding document: " + error);
+    }
+} */
 
 
 // Defines the login components
@@ -14,7 +27,6 @@ const Login = () => {
     const [userInfo, setUserInfo] = useState([]);
     const [email, setEmail] = useState(false);
     const [password, setPassword] = useState('');
-
     // Handles navigation
     const navigation = useNavigation();
 
