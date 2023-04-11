@@ -3,10 +3,22 @@ import { View,Text,TextInput,TouchableOpacity,ImageBackground,Image } from 'reac
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { authentication, promptyDB } from '../../firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { collection, setDoc, doc} from "firebase/firestore";
+import { createUserWithEmailAndPassword, sendEmailVerification, getAuth, onAuthStateChanged, updateProfile } from 'firebase/auth';
+import { collection, setDoc, doc, updateDoc} from "firebase/firestore";
 
 const Register = () => {
+
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            updateProfile(auth.currentUser, {
+                displayName: username,
+                email: email
+            }).then(() => {
+                navigation.navigate('Account')
+            });
+        } 
+    });
      // Handles login
      const [email, setEmail] = useState('');
      const [password, setPassword] = useState('');
@@ -27,6 +39,11 @@ const Register = () => {
                 friendsList: [],
                 profilePictureUrl: ""
                 });    
+            const auth = getAuth();
+            sendEmailVerification(auth.currentUser)
+            .then(() => {
+                console.log("email verification send!");
+            });
             console.log("Success adding document");
         } catch(error) {
             console.log("Error adding document: " + error);
@@ -39,7 +56,6 @@ const Register = () => {
         console.log(res);
         const userID = res.user.uid;
         addUserDoc(userID);
-        navigation.navigate('Account')
        })
        .catch((res) => {
         console.log(res);

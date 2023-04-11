@@ -1,51 +1,102 @@
 import React,{ useState } from 'react';
 import { StyleSheet,View,Text,ImageBackground,Image,TouchableOpacity,TextInput } from 'react-native';
 import Navbar from './Navbar';
+import { getAuth, updateProfile } from 'firebase/auth';
+import { authentication, promptyDB, promptyStorage } from "../../firebase";
+import { doc, getDoc, updateDoc, get } from "firebase/firestore";
+import * as ImagePicker from 'expo-image-picker';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+//import storage from '@react-native-firebase/storage';
+
 
 const Account = () => {
-    const [name,setName] = useState("What's Your Name?");
-    const [tempUsername,setTempUsername] = useState('Name');
-    const [username,setUsername] = useState('');
-    const [isEditingName,setIsEditingName] = useState(false);
+    const auth = getAuth();
+    const user = auth.currentUser;
+    let displayName;
+    if (user) {
+        displayName = user.displayName;
+    }
+   
+    const [image, setImage] = useState(null);
 
-    const handleNamePress = () => {
-        setIsEditingName(true);
-        setName('');
-    };
+    async function pickImage() {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync().catch((error) => {
+            console.log("Error: " + error);
+           });
+        if (status !== 'granted') {
+          alert('Permission to access media library is required!');
+          return;
+        }
 
-    const handleNameChange = (newName) => {
-        setName(newName);
-        const newUsername = '@' + newName.trim().split(' ').join('_').toLowerCase();
-        setTempUsername(newUsername);
-    };
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+          }).catch((error) => {
+            console.log("Error: " + error);
+           });
+        
+          if (!result.canceled) {
+            const res = await fetch(result.assets[0].uri).catch((error) => {
+                console.log("Error: " + error);
+            });
+            const blob = await res.blob();
+           // create storage reference
+           const profilePictureRef = ref(promptyStorage, `profilePictures/${user.uid}`);
 
+           uploadBytes(profilePictureRef, blob).then((snapshot) => {
+            //console.log('uploaded image');
+           }).catch((error) => {
+            console.log("Error: " + error);
+           });
+           getDownloadURL(profilePictureRef).then((url) => {
+            
+            updateProfile(user, {
+                photoURL: url
+            }).then(() => {
+                //console.log("photo updated");
+            }).catch((error) => {
+                console.error("Error updating profile url: " + error);
+            });
+           
+           }).catch((error) => {
+            console.log("error: " + error);
+           })
+        const userDoc = doc(promptyDB, "users", user.uid);
+        await updateDoc(userDoc, {
+            profilePictureUrl: user.photoURL
+        })
+        setImage(user.photoURL);
+        }
+    }
+  
     const handleNameSubmit = () => {
         setUsername(tempUsername);
         setIsEditingName(false);
     };
 
+    let imgSrc;
+    if (user) {
+        console.log(user.photoURL);
+        imgSrc = user.photoURL;
+    } else {
+        imgSrc = '../../assets/placeholder.png'
+    }
+    
+   //  <Image source={require('../../assets/placeholder.png')} style={styles.profilePicture} />
     return (
         <View style={styles.container}>
             <View style={styles.accountContainer}>
                 <ImageBackground source={require('../../assets/background.png')} style={styles.background}>
                     <View style={styles.infoContainer}>
-                        <Image source={require('../../assets/placeholder.png')} style={styles.profilePicture} />
-                        {isEditingName ? (
-                            <TextInput
-                                style={styles.editableText}
-                                onChangeText={handleNameChange}
-                                value={name}
-                                autoFocus={true}
-                                onSubmitEditing={handleNameSubmit}
-                            />
-                        ) : (
-                                <Text style={styles.info}>{name}</Text>
-                            )}
-                        <Text style={styles.info}>{username}</Text>
 
-                        <TouchableOpacity onPress={handleNamePress}>
-                            <Text style={styles.edit}>Edit</Text>
-                        </TouchableOpacity>
+                    <TouchableOpacity onPress={pickImage}>
+                    <Image source={{uri: user.photoURL}} style={styles.profilePicture} />
+                    </TouchableOpacity>
+                        
+
+                        <Text style={styles.info}>{"@" + displayName}</Text>
                     </View>
                 </ImageBackground>
             </View>
