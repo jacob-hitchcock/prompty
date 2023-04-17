@@ -6,6 +6,7 @@ import { authentication, promptyDB } from '../../firebase';
 import { createUserWithEmailAndPassword, sendEmailVerification, getAuth, onAuthStateChanged, updateProfile } from 'firebase/auth';
 import { collection, setDoc, doc, updateDoc} from "firebase/firestore";
 
+
 const Register = () => {
 
     const auth = getAuth();
@@ -37,7 +38,8 @@ const Register = () => {
                 firstName: "",
                 lastName: "",
                 friendsList: [],
-                profilePictureUrl: ""
+                profilePictureUrl: "",
+                userId: userID
                 });    
             const auth = getAuth();
             sendEmailVerification(auth.currentUser)
@@ -61,7 +63,6 @@ const Register = () => {
         console.log(res);
        })
      }
-
 
     const navigation = useNavigation();
 

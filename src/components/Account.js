@@ -6,10 +6,15 @@ import { authentication, promptyDB, promptyStorage } from "../../firebase";
 import { doc, getDoc, updateDoc, get } from "firebase/firestore";
 import * as ImagePicker from 'expo-image-picker';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-//import storage from '@react-native-firebase/storage';
 
 
 const Account = () => {
+    // May want to set a condition for whether user has a profile
+    // pic or not
+    // if not, set the image to the blank image
+    // if do, initialize it to the profile pic they have 
+    // in the returned component, have the image's source be the variable for image
+    const [image, setImage] = useState(null);
     const auth = getAuth();
     const user = auth.currentUser;
     let displayName;
@@ -17,9 +22,9 @@ const Account = () => {
         displayName = user.displayName;
     }
    
-    const [image, setImage] = useState(null);
-
+    // ChatGPT to help with getting image from camera roll
     async function pickImage() {
+        // Asking for permission
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync().catch((error) => {
             console.log("Error: " + error);
            });
@@ -27,7 +32,7 @@ const Account = () => {
           alert('Permission to access media library is required!');
           return;
         }
-
+        // Opens camera roll library, allows user to select image
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
@@ -37,12 +42,20 @@ const Account = () => {
             console.log("Error: " + error);
            });
         
+           // If they didn't cancel (if they chose a picture)
           if (!result.canceled) {
+
+            // Take the uri of selected image 
+            // (accessed through result.asset's value, which is an array containing a single object, which has a uri attribute)
             const res = await fetch(result.assets[0].uri).catch((error) => {
                 console.log("Error: " + error);
             });
+            // make a blob of that (file)
             const blob = await res.blob();
-           // create storage reference
+
+           // create storage reference (this is where you WANT to store the image)
+           /* I decided to store it inside a folder called 'profilePictures' and 
+           name each image after the unique userID of that person */
            const profilePictureRef = ref(promptyStorage, `profilePictures/${user.uid}`);
 
            uploadBytes(profilePictureRef, blob).then((snapshot) => {
@@ -50,32 +63,31 @@ const Account = () => {
            }).catch((error) => {
             console.log("Error: " + error);
            });
+           // Want to save the URL of the newly uploaded image
            getDownloadURL(profilePictureRef).then((url) => {
-            
-            updateProfile(user, {
-                photoURL: url
-            }).then(() => {
-                //console.log("photo updated");
-            }).catch((error) => {
-                console.error("Error updating profile url: " + error);
-            });
-           
+                // saves it in user's photoURL attribute
+                updateProfile(user, {
+                    photoURL: url
+                }).then(() => {
+                    //console.log("photo updated");
+                }).catch((error) => {
+                    console.error("Error updating profile url: " + error);
+                });
            }).catch((error) => {
             console.log("error: " + error);
-           })
+           });
+
+        /* Save it in document representing user, to render their profile 
+           picture for other users when they search and view their profile */
         const userDoc = doc(promptyDB, "users", user.uid);
         await updateDoc(userDoc, {
             profilePictureUrl: user.photoURL
         })
+        // Re-renders photo component on account page
         setImage(user.photoURL);
         }
     }
   
-    const handleNameSubmit = () => {
-        setUsername(tempUsername);
-        setIsEditingName(false);
-    };
-
     let imgSrc;
     if (user) {
         console.log(user.photoURL);
