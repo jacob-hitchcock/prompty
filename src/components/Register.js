@@ -37,7 +37,6 @@ const Register = () => {
                 username: username,
                 firstName: "",
                 lastName: "",
-                friendsList: [],
                 profilePictureUrl: "",
                 userId: userID
                 });    

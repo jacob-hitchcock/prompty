@@ -2,17 +2,31 @@ import React, { useState } from 'react';
 import { StyleSheet,View,Text,ImageBackground, Image,TouchableOpacity,TextInput } from 'react-native';
 import Navbar from './Navbar';
 import { SearchBar } from 'react-native-elements';
-import { promptyDB } from "../../firebase";
-import { doc, getDoc, updateDoc, get, query, where, collection, getDocs } from "firebase/firestore";
-
+import { doc, getDoc, updateDoc, get, query, where, collection, getDocs, setDoc, addDoc } from "firebase/firestore";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+import { promptyDB } from '../../firebase';
 
 const Contacts = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
-
     async function sendFriendRequest(userID) {
-        console.log("friend request sent to user: " + userID);
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const currentID = user.uid;
+
+        // gets reference to friend request collection
+       
+        const requestRef = doc(promptyDB, "friendRequests", userID, "receivedRequests", currentID);
+
+        await setDoc(requestRef, {
+            sender: currentID,
+            recipient: userID,
+            senderDisplayName: user.displayName,
+            senderPhotoURL: user.photoURL,
+            status: "pending"
+        })
+        console.log("friend request sent to user: " + userID + " by user: " + user.uid);
     }
 
     async function searchUsers(username) {
@@ -25,7 +39,6 @@ const Contacts = () => {
         setSearchResults(userDocuments);
     }
    
-
     let resultView;
     console.log(searchResults);
     
@@ -35,8 +48,6 @@ const Contacts = () => {
             <Text>{searchResults[0].username}</Text>
         </TouchableOpacity>
     }
-    
-   
     
     return (
         <View style={styles.container}>

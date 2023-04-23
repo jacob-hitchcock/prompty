@@ -9,6 +9,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 
 const Account = () => {
+   
     // May want to set a condition for whether user has a profile
     // pic or not
     // if not, set the image to the blank image
@@ -22,6 +23,7 @@ const Account = () => {
         displayName = user.displayName;
     }
    
+    
     // ChatGPT to help with getting image from camera roll
     async function pickImage() {
         // Asking for permission
@@ -90,7 +92,7 @@ const Account = () => {
   
     let imgSrc;
     if (user) {
-        console.log(user.photoURL);
+        //(user.photoURL);
         imgSrc = user.photoURL;
     } else {
         imgSrc = '../../assets/placeholder.png'
@@ -108,7 +110,7 @@ const Account = () => {
                     </TouchableOpacity>
                         
 
-                        <Text style={styles.info}>{"@" + displayName}</Text>
+                        <Text style={styles.info}>{"@" + user.displayName}</Text>
                     </View>
                 </ImageBackground>
             </View>
