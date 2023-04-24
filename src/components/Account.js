@@ -3,12 +3,16 @@ import { StyleSheet,View,Text,ImageBackground,Image,TouchableOpacity,TextInput }
 import Navbar from './Navbar';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { authentication, promptyDB, promptyStorage } from "../../firebase";
-import { doc, getDoc, updateDoc, get } from "firebase/firestore";
+import { doc, getDoc, updateDoc, get, addDoc, collection, getDocs } from "firebase/firestore";
 import * as ImagePicker from 'expo-image-picker';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 
 const Account = () => {
+   
+    const navigation = useNavigation();
+    const route = useRoute();
    
     // May want to set a condition for whether user has a profile
     // pic or not
@@ -18,12 +22,36 @@ const Account = () => {
     const [image, setImage] = useState(null);
     const auth = getAuth();
     const user = auth.currentUser;
-    let displayName;
+    
     if (user) {
         displayName = user.displayName;
     }
+
+
+    /*
+    async function getPrompts() {
+        const promptSnapshot = await getDocs(collection(promptyDB, "prompts"));
    
+    promptSnapshot.forEach((prompt) => {
+        //prompt.data()
+        //console.log(prompt.data().prompt);
+    })
+    console.log(promptSnapshot.size)
+    }
+    getPrompts();
     
+    */
+   
+   /*prompts.forEach(async (currentPrompt)=> {
+        await addDoc(collection(promptyDB, "prompts"), {
+            prompt: currentPrompt
+        })
+    }); */
+
+    function handleRequests() {
+        navigation.navigate('Requests');
+    }
+   
     // ChatGPT to help with getting image from camera roll
     async function pickImage() {
         // Asking for permission
@@ -108,9 +136,17 @@ const Account = () => {
                     <TouchableOpacity onPress={pickImage}>
                     <Image source={{uri: user.photoURL}} style={styles.profilePicture} />
                     </TouchableOpacity>
+                    <Text style={styles.info}>{"@" + user.displayName}</Text>
+                    <View style={styles.separate}/>
+                        <TouchableOpacity style={styles.option}>
+                            <Text style={styles.optionFont}>User Settings</Text>
+                        </TouchableOpacity>
+                        <View style={styles.separate}/>
+                        <TouchableOpacity style={styles.option} onPress={handleRequests}>
+                            <Text style={styles.optionFont}>Friend Requests</Text>
+                        </TouchableOpacity>
+                        <View style={styles.separate}/>
                         
-
-                        <Text style={styles.info}>{"@" + user.displayName}</Text>
                     </View>
                 </ImageBackground>
             </View>
@@ -150,7 +186,7 @@ const styles = StyleSheet.create({
     info: {
         fontSize: 20,
         color: '#27292E',
-        marginBottom: 5,
+        marginBottom: 30,
     },
     profilePicture: {
         height: 265,
@@ -170,6 +206,22 @@ const styles = StyleSheet.create({
     edit: {
         color: '#23356F',
         textDecorationLine: 'underline',
+    },
+    separate: {
+        width: '85%',
+        height: 2,
+        backgroundColor: '#CCCCCC'
+    },
+    option: {
+        paddingTop: 20,
+        paddingBottom: 15,
+    },
+    optionFont: {
+        fontFamily: 'Arial',
+        fontSize: 20,
+        textAlign: 'Left',
+        color: '#27292E99',
+        fontWeight: 'bold'
     }
 });
 

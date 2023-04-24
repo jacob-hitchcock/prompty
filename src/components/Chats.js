@@ -13,6 +13,11 @@ import Navbar from './Navbar';
  };
 
 
+ // fetch someone's friend list array, which should have each friend's user ID
+ // using each user ID, render each person's name and profile pic
+ // rows of two
+ 
+
 
  const chatViews = Object.keys(peopleChats).map((current) => {
     

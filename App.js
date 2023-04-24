@@ -10,7 +10,11 @@ import Account from './src/components/Account';
 import Chats from './src/components/Chats';
 import Contacts from './src/components/Contacts';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Requests from './src/components/receivedRequests';
 import { authentication } from './firebase';
+
+// We currently have 388 prompts stored in firebase
+
 
 // Assists with app navigation
 const Stack = createStackNavigator();
@@ -53,6 +57,7 @@ const App = () => {
           <Stack.Screen name="Account" component={Account} options={{
             ...TransitionPresets.ScaleFromCenterAndroid,
           }} />
+          <Stack.Screen name="Requests" component={Requests} />
           <Stack.Screen name="Chats" component={Chats} options={{
             ...TransitionPresets.ModalFadeTransition,
           }} />
@@ -81,6 +86,7 @@ const App = () => {
         <Stack.Screen name="Account" component={Account} options={{
           ...TransitionPresets.ScaleFromCenterAndroid,
         }} />
+        <Stack.Screen name="Requests" component={Requests} />
         <Stack.Screen name="Chats" component={Chats} options={{
           ...TransitionPresets.ModalFadeTransition,
         }} />
