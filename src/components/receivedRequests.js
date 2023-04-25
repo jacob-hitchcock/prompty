@@ -65,7 +65,7 @@ const Requests = () => {
     </View>
         <ScrollView style={styles.scroll} contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}
             >
-                <View style={{alignItems: 'center', width: '50%', marginBottom: 10, marginTop: 10}} >
+                <View style={{alignItems: 'center', width: '50%', marginBottom: 5, marginTop: 10}} >
                     <View style={{ overflow: 'hidden', height: 170, width: 170, borderRadius: 15, position: 'relative'}}>
                             <ImageBackground style={styles.card}source={{uri: "https://firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2FRuIDqCW1bbb3APY7oeBfpf3XVIy1?alt=media&token=c22b3520-4797-4bd9-af6c-cb7a5275587c"} }>
 
@@ -79,10 +79,10 @@ const Requests = () => {
                             </TouchableOpacity>
                             </ImageBackground>
                         </View>
-                        <Text style={{fontSize: 20, fontWeight: 'Bold', textAlign: 'center'}}>@travondragon</Text>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>@travondragon</Text>
                     </View>
 
-                    <View style={{alignItems: 'center', width: '50%', marginBottom: 10, marginTop: 10}} >
+                    <View style={{alignItems: 'center', width: '50%', marginBottom: 5, marginTop: 10}} >
                     <View style={{ overflow: 'hidden', height: 170, width: 170, borderRadius: 15, position: 'relative'}}>
                             <ImageBackground style={styles.card}source={{uri: "https://firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2FRuIDqCW1bbb3APY7oeBfpf3XVIy1?alt=media&token=c22b3520-4797-4bd9-af6c-cb7a5275587c"} }>
 
@@ -96,10 +96,10 @@ const Requests = () => {
                             </TouchableOpacity>
                             </ImageBackground>
                         </View>
-                        <Text style={{fontSize: 20, fontWeight: 'Bold', textAlign: 'center'}}>@travondragon</Text>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>@travondragon</Text>
                     </View>
 
-                    <View style={{alignItems: 'center', width: '50%', marginBottom: 10, marginTop: 10}} >
+                    <View style={{alignItems: 'center', width: '50%', marginBottom: 5, marginTop: 10}} >
                     <View style={{ overflow: 'hidden', height: 170, width: 170, borderRadius: 15, position: 'relative'}}>
                             <ImageBackground style={styles.card}source={{uri: "https://firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2FRuIDqCW1bbb3APY7oeBfpf3XVIy1?alt=media&token=c22b3520-4797-4bd9-af6c-cb7a5275587c"} }>
 
@@ -113,27 +113,10 @@ const Requests = () => {
                             </TouchableOpacity>
                             </ImageBackground>
                         </View>
-                        <Text style={{fontSize: 20, fontWeight: 'Bold', textAlign: 'center'}}>@travondragon</Text>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>@travondragon</Text>
                     </View>
 
-                    <View style={{alignItems: 'center', width: '50%'}} >
-                    <View style={{ overflow: 'hidden', height: 170, width: 170, borderRadius: 15, position: 'relative',}}>
-                            <ImageBackground style={styles.card}source={{uri: "https://firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2FRuIDqCW1bbb3APY7oeBfpf3XVIy1?alt=media&token=c22b3520-4797-4bd9-af6c-cb7a5275587c"} }>
-
-                            <TouchableOpacity >
-                            <Icon name={'check'} size={42} color={'green'} style={{position: 'absolute', bottom: -170, left: 100}}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity > 
-                            <Icon
-                                name={'frown'} size={42} color={'red'}
-                                style={{position: 'absolute', bottom: -170, right: 100}}/>
-                            </TouchableOpacity>
-                            </ImageBackground>
-                        </View>
-                        <Text style={{fontSize: 20, fontWeight: 'Bold', textAlign: 'center'}}>@travondragon</Text>
-                    </View>
-
-                    <View style={{alignItems: 'center', width: '50%', marginBottom: 10, marginTop: 10}} >
+                   <View style={{alignItems: 'center', width: '50%', marginBottom: 5, marginTop: 10}} >
                     <View style={{ overflow: 'hidden', height: 170, width: 170, borderRadius: 15, position: 'relative'}}>
                             <ImageBackground style={styles.card}source={{uri: "https://firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2FRuIDqCW1bbb3APY7oeBfpf3XVIy1?alt=media&token=c22b3520-4797-4bd9-af6c-cb7a5275587c"} }>
 
@@ -147,10 +130,10 @@ const Requests = () => {
                             </TouchableOpacity>
                             </ImageBackground>
                         </View>
-                        <Text style={{fontSize: 20, fontWeight: 'Bold', textAlign: 'center'}}>@travondragon</Text>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>@travondragon</Text>
                     </View>
 
-                    <View style={{alignItems: 'center', width: '50%', marginBottom: 10, marginTop: 10}} >
+                    <View style={{alignItems: 'center', width: '50%', marginBottom: 5, marginTop: 10}} >
                     <View style={{ overflow: 'hidden', height: 170, width: 170, borderRadius: 15, position: 'relative'}}>
                             <ImageBackground style={styles.card}source={{uri: "https://firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2FRuIDqCW1bbb3APY7oeBfpf3XVIy1?alt=media&token=c22b3520-4797-4bd9-af6c-cb7a5275587c"} }>
 
@@ -164,9 +147,63 @@ const Requests = () => {
                             </TouchableOpacity>
                             </ImageBackground>
                         </View>
-                        <Text style={{fontSize: 20, fontWeight: 'Bold', textAlign: 'center'}}>@travondragon</Text>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>@travondragon</Text>
                     </View>
-            
+
+                    <View style={{alignItems: 'center', width: '50%', marginBottom: 5, marginTop: 10}} >
+                    <View style={{ overflow: 'hidden', height: 170, width: 170, borderRadius: 15, position: 'relative'}}>
+                            <ImageBackground style={styles.card}source={{uri: "https://firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2FRuIDqCW1bbb3APY7oeBfpf3XVIy1?alt=media&token=c22b3520-4797-4bd9-af6c-cb7a5275587c"} }>
+
+                            <TouchableOpacity >
+                            <Icon name={'check'} size={42} color={'green'} style={{position: 'absolute', bottom: -170, left: 100}}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity > 
+                            <Icon
+                                name={'frown'} size={42} color={'red'}
+                                style={{position: 'absolute', bottom: -170, right: 100}}/>
+                            </TouchableOpacity>
+                            </ImageBackground>
+                        </View>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>@travondragon</Text>
+                    </View>
+
+                    <View style={{alignItems: 'center', width: '50%', marginBottom: 5, marginTop: 10}} >
+                    <View style={{ overflow: 'hidden', height: 170, width: 170, borderRadius: 15, position: 'relative'}}>
+                            <ImageBackground style={styles.card}source={{uri: "https://firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2FRuIDqCW1bbb3APY7oeBfpf3XVIy1?alt=media&token=c22b3520-4797-4bd9-af6c-cb7a5275587c"} }>
+
+                            <TouchableOpacity >
+                            <Icon name={'check'} size={42} color={'green'} style={{position: 'absolute', bottom: -170, left: 100}}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity > 
+                            <Icon
+                                name={'frown'} size={42} color={'red'}
+                                style={{position: 'absolute', bottom: -170, right: 100}}/>
+                            </TouchableOpacity>
+                            </ImageBackground>
+                        </View>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>@travondragon</Text>
+                    </View>
+
+                    <View style={{alignItems: 'center', width: '50%', marginBottom: 5, marginTop: 10}} >
+                    <View style={{ overflow: 'hidden', height: 170, width: 170, borderRadius: 15, position: 'relative'}}>
+                            <ImageBackground style={styles.card}source={{uri: "https://firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2FRuIDqCW1bbb3APY7oeBfpf3XVIy1?alt=media&token=c22b3520-4797-4bd9-af6c-cb7a5275587c"} }>
+
+                            <TouchableOpacity >
+                            <Icon name={'check'} size={42} color={'green'} style={{position: 'absolute', bottom: -170, left: 100}}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity > 
+                            <Icon
+                                name={'frown'} size={42} color={'red'}
+                                style={{position: 'absolute', bottom: -170, right: 100}}/>
+                            </TouchableOpacity>
+                            </ImageBackground>
+                        </View>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>@travondragon</Text>
+                    </View>
+
+
+           
+        
         </ScrollView>
             <Navbar />
         </View>
@@ -182,8 +219,7 @@ const styles = StyleSheet.create({
     },
     scroll: {
         marginTop: 10,
-       
-       
+        marginBottom: 100
     },
       title: {
         color: 'white',
