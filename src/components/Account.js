@@ -8,7 +8,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-
 const Account = () => {
    
     const navigation = useNavigation();
@@ -27,9 +26,7 @@ const Account = () => {
         displayName = user.displayName;
     }
 
-
-    /*
-    async function getPrompts() {
+    /*async function getPrompts() {
         const promptSnapshot = await getDocs(collection(promptyDB, "prompts"));
    
     promptSnapshot.forEach((prompt) => {
@@ -38,11 +35,10 @@ const Account = () => {
     })
     console.log(promptSnapshot.size)
     }
-    getPrompts();
+    getPrompts(); */
     
-    */
-   
-   /*prompts.forEach(async (currentPrompt)=> {
+    
+  /* prompts.forEach(async (currentPrompt)=> {
         await addDoc(collection(promptyDB, "prompts"), {
             prompt: currentPrompt
         })
@@ -183,7 +179,7 @@ const styles = StyleSheet.create({
         marginTop: 150,
         alignItems: 'center',
     },
-    info: {
+    info: { 
         fontSize: 20,
         color: '#27292E',
         marginBottom: 30,
@@ -219,7 +215,6 @@ const styles = StyleSheet.create({
     optionFont: {
         fontFamily: 'Arial',
         fontSize: 20,
-        textAlign: 'Left',
         color: '#27292E99',
         fontWeight: 'bold'
     }
