@@ -35,7 +35,7 @@ const Login = () => {
     const handleLoginPress = () => {
         signInWithEmailAndPassword(authentication, email, password)
         .then((res) => {
-            console.log(res);
+            //console.log(res);
             navigation.navigate('Account');
         })
         .catch((res) => {
