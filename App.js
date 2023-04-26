@@ -59,7 +59,7 @@ const App = () => {
           }} />
           <Stack.Screen name="Requests" component={Requests} />
           <Stack.Screen name="Chats" component={Chats} options={{
-            ...TransitionPresets.ModalFadeTransition,
+            ...TransitionPresets.ModalFadeTransition, title: "Chats"
           }} />
           <Stack.Screen name="Contacts" component={Contacts} options={{
             ...TransitionPresets.ModalFadeTransition,
@@ -88,7 +88,7 @@ const App = () => {
         }} />
         <Stack.Screen name="Requests" component={Requests} />
         <Stack.Screen name="Chats" component={Chats} options={{
-          ...TransitionPresets.ModalFadeTransition,
+          ...TransitionPresets.ModalFadeTransition, title: 'Chats'
         }} />
         <Stack.Screen name="Contacts" component={Contacts} options={{
           ...TransitionPresets.ModalFadeTransition,

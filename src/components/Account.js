@@ -154,7 +154,7 @@ const Account = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#6D7EB6',
+        backgroundColor: '#24366F',
     },
     background: {
         flex: 1,
@@ -183,6 +183,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#27292E',
         marginBottom: 30,
+        fontWeight: 'bold'
     },
     profilePicture: {
         height: 265,

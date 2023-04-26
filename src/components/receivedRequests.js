@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet,View,Text,ImageBackground,Image,TouchableOpacity,TextInput, ScrollView , Button} from 'react-native';
 import Navbar from './Navbar';
 import { doc, getDoc, updateDoc, get, query, where, collection, getDocs, setDoc, addDoc, deleteDoc} from "firebase/firestore";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { promptyDB } from '../../firebase';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -31,16 +31,16 @@ const Requests = () => {
         const requestCards = requestsArr.map((currentReq) => {
             return (
                 <View data={currentReq} key={currentReq.id} style={{alignItems: 'center', width: '50%', marginBottom: 5, marginTop: 10}} >
-                <View style={{ overflow: 'hidden', height: 170, width: 170, borderRadius: 15, position: 'relative'}}>
+                    <View style={{ overflow: 'hidden', height: 170, width: 170, borderRadius: 15, position: 'relative'}}>
                         <ImageBackground style={styles.card}source={{uri: currentReq.senderPhotoURL} }>
-                        <TouchableOpacity onPress={() => handleAccept(currentReq)}>
-                        <Icon name={'check'} size={42} color={'green'} style={{position: 'absolute', bottom: -170, left: 100}}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleDeny(currentReq)}> 
-                        <Icon
-                            name={'frown'} size={42} color={'red'}
-                            style={{position: 'absolute', bottom: -170, right: 100}}/>
-                        </TouchableOpacity>
+                            <TouchableOpacity activeOpacity={1} onPress={() => handleAccept(currentReq)}>
+                                <Icon name={'check'} size={42} color={'green'} style={{position: 'absolute', bottom: -170, left: 100}}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleDeny(currentReq)}> 
+                            <Icon
+                                name={'frown'} size={42} color={'red'}
+                                style={{position: 'absolute', bottom: -170, right: 100}}/>
+                            </TouchableOpacity>
                         </ImageBackground>
                     </View>
                     <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center', color: 'white'}}>@{currentReq.senderDisplayName}</Text>
@@ -72,21 +72,24 @@ const Requests = () => {
             friendDisplayName: user.displayName,
             friendPhotoURL: user.photoURL});
 
-        const request = doc(promptyDB, 'friendRequests', userID, 'receivedRequests', requestData.sender);
-        await deleteDoc(request);
-        
-        // get to current user's request collection
-        // query for the request where sender = request.data sender
-        //delete the document
-        // put sender's id in current user's friends list
-        // put current user's id in sender's friends list
-        // make a new chat
+           // make a new chat
             // chat should have an array of participants: [userid1, userid2]
                 // order shouldn't matter
             // chat should have a collection of messages
                 // message should have:
                     // senderID, recipientID, timestamp, type of message or prompt
                     // text
+                    // or instead of text, have it called content and it can be either text or image
+        const chats= collection(promptyDB, 'chats');
+        await addDoc(chats, {
+            participants: [currentUser, sender],
+        });
+
+        // deletes request because it was accepted
+        const request = doc(promptyDB, 'friendRequests', userID, 'receivedRequests', requestData.sender);
+        await deleteDoc(request);
+
+        // refreshes request state
         const usersRequests = collection(promptyDB, 'friendRequests', userID, 'receivedRequests');
         const data = await getRequests();
         setRequests(data);
@@ -99,9 +102,10 @@ const Requests = () => {
         //delete the document
         const usersRequests = collection(promptyDB, 'friendRequests', userID, 'receivedRequests');
 
-        // find doc?
+        // delete request because it was denied
         const request = doc(promptyDB, 'friendRequests', userID, 'receivedRequests', requestData.sender);
         await deleteDoc(request);
+        // refreshes request state
         const data = await getRequests();
         setRequests(data);
         console.log("denied: " + requestData.senderDisplayName)
@@ -110,17 +114,15 @@ const Requests = () => {
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', alignItems: 'center', height: 80, backgroundColor: '#f0f0f0', justifyContent: 'center' }}>
+                <TouchableOpacity style={{ paddingHorizontal: 6 }} onPress={() => navigation.goBack()}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 20 }}>{'<'}</Text>
+                </TouchableOpacity>
+                <Text style={{ flex: 1, fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginTop: 25 }}>Requests</Text>
+            </View>
 
-        <TouchableOpacity style={{ paddingHorizontal: 10 }} onPress={() => navigation.goBack()}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 20 }}>{'<'}</Text>
-      </TouchableOpacity>
-      <Text style={{ flex: 1, fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginTop: 25 }}>Requests</Text>
-
-    </View>
-        <ScrollView style={styles.scroll} contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}
-            >
-           {requestState}
-        </ScrollView>
+            <ScrollView style={styles.scroll} contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                {requestState}
+            </ScrollView>
             <Navbar />
         </View>
     )
