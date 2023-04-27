@@ -18,14 +18,16 @@ const Account = () => {
     // if not, set the image to the blank image
     // if do, initialize it to the profile pic they have 
     // in the returned component, have the image's source be the variable for image
-    const [image, setImage] = useState(null);
+   
     const auth = getAuth();
     const user = auth.currentUser;
-    
+    console.log("name: " + user.displayName);
+    console.log("photo: " + user.photoURL);
     if (user) {
         displayName = user.displayName;
     }
-
+    console.log(displayName)
+    const [image, setImage] = useState(user.photoURL);
     /*async function getPrompts() {
         const promptSnapshot = await getDocs(collection(promptyDB, "prompts"));
    
@@ -110,6 +112,7 @@ const Account = () => {
             profilePictureUrl: user.photoURL
         })
         // Re-renders photo component on account page
+        //console.log("user.photoURL: ", user.photoURL);
         setImage(user.photoURL);
         }
     }
@@ -130,7 +133,7 @@ const Account = () => {
                     <View style={styles.infoContainer}>
 
                     <TouchableOpacity onPress={pickImage}>
-                    <Image source={{uri: user.photoURL}} style={styles.profilePicture} />
+                    <Image source={{uri: image}} style={styles.profilePicture} />
                     </TouchableOpacity>
                     <Text style={styles.info}>{"@" + user.displayName}</Text>
                     <View style={styles.separate}/>

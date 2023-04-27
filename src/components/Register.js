@@ -12,9 +12,11 @@ const Register = () => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
         if (user) {
+            console.log(username)
             updateProfile(auth.currentUser, {
                 displayName: username,
-                email: email
+                email: email,
+                photoURL: "https//firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2Fplaceholder.png?alt=media&token=3a0717f2-c173-450b-9ea6-7c000d4bb9a5"
             }).then(() => {
                 navigation.navigate('Account')
             });
@@ -37,7 +39,7 @@ const Register = () => {
                 username: username,
                 firstName: "",
                 lastName: "",
-                profilePictureUrl: "",
+                profilePictureUrl: "https://firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2Fplaceholder.png?alt=media&token=3a0717f2-c173-450b-9ea6-7c000d4bb9a5",
                 userId: userID
                 });    
             const auth = getAuth();
