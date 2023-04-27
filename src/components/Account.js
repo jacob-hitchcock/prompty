@@ -26,7 +26,7 @@ const Account = () => {
     if (user) {
         displayName = user.displayName;
     }
-    console.log(displayName)
+    //console.log(displayName)
     const [image, setImage] = useState(user.photoURL);
     /*async function getPrompts() {
         const promptSnapshot = await getDocs(collection(promptyDB, "prompts"));

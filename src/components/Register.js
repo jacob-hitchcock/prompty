@@ -8,25 +8,26 @@ import { collection, setDoc, doc, updateDoc} from "firebase/firestore";
 
 
 const Register = () => {
-
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            console.log(username)
-            updateProfile(auth.currentUser, {
-                displayName: username,
-                email: email,
-                photoURL: "https//firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2Fplaceholder.png?alt=media&token=3a0717f2-c173-450b-9ea6-7c000d4bb9a5"
-            }).then(() => {
-                navigation.navigate('Account')
-            });
-        } 
-    });
      // Handles login
      const [email, setEmail] = useState('');
      const [password, setPassword] = useState('');
      const [username, setUsername] = useState('');
 
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log(username),
+
+            updateProfile(auth.currentUser, {
+                displayName: username,
+                email: email,
+                photoURL: "https://firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2Fplaceholder.png?alt=media&token=3a0717f2-c173-450b-9ea6-7c000d4bb9a5"
+            }).then(() => {
+                navigation.navigate('Account')
+            });
+        } 
+    });
+ 
      async function addUserDoc(userID) {
         try {
             // gets a reference of the specific user document to be created
