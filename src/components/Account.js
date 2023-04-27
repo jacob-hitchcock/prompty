@@ -21,8 +21,8 @@ const Account = () => {
    
     const auth = getAuth();
     const user = auth.currentUser;
-    console.log("name: " + user.displayName);
-    console.log("photo: " + user.photoURL);
+    //console.log("name: " + user.displayName);
+    //console.log("photo: " + user.photoURL);
     if (user) {
         displayName = user.displayName;
     }

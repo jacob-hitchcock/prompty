@@ -82,7 +82,8 @@ const Requests = () => {
                     // or instead of text, have it called content and it can be either text or image
         const chats= collection(promptyDB, 'chats');
         await addDoc(chats, {
-            participants: [currentUser, sender],
+            participant1: currentUser,
+            participant2: sender
         });
 
         // deletes request because it was accepted

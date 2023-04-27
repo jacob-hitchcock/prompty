@@ -10,7 +10,8 @@ import Account from './src/components/Account';
 import Chats from './src/components/Chats';
 import Contacts from './src/components/Contacts';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import Requests from './src/components/receivedRequests';
+import Requests from './src/components/Requests';
+import Chat from './src/components/Chat';
 import { authentication } from './firebase';
 
 // We currently have 388 prompts stored in firebase
@@ -61,6 +62,9 @@ const App = () => {
           <Stack.Screen name="Chats" component={Chats} options={{
             ...TransitionPresets.ModalFadeTransition, title: "Chats"
           }} />
+          <Stack.Screen name="Chat" component={Chat} options={{
+          ...TransitionPresets.ModalFadeTransition, title: 'Chat'
+        }} />
           <Stack.Screen name="Contacts" component={Contacts} options={{
             ...TransitionPresets.ModalFadeTransition,
           }} />
@@ -89,6 +93,9 @@ const App = () => {
         <Stack.Screen name="Requests" component={Requests} />
         <Stack.Screen name="Chats" component={Chats} options={{
           ...TransitionPresets.ModalFadeTransition, title: 'Chats'
+        }} />
+        <Stack.Screen name="Chat" component={Chat} options={{
+          ...TransitionPresets.ModalFadeTransition, title: 'Chat'
         }} />
         <Stack.Screen name="Contacts" component={Contacts} options={{
           ...TransitionPresets.ModalFadeTransition,

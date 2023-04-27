@@ -24,7 +24,28 @@ const Chats = () => {
 
     const navigation = useNavigation();
 
-    function handleChat() {
+    async function handleChat(friend) {
+        const friendID = friend.friend;
+        const userID = getAuth().currentUser.uid;
+        const chatsCollectionRef = collection(promptyDB, "chats");
+
+        const chatQuery = query(chatsCollectionRef, where("participant1", "in", [userID, friendID]), where("participant2", "in", [userID, friendID]));
+
+        const queryDoc = await getDocs(chatQuery);
+    
+        const usersChatRef = queryDoc.docs.map((doc) => doc)[0].ref;
+        const usersChatData = queryDoc.docs.map((doc) => doc)[0].data();
+        console.log(usersChatData)
+        //await updateDoc(usersChatRef, {text: "Travvy you did it!"})
+        const messagesCollectionRef = collection(usersChatRef, "messages");
+        
+            // for adding new messages
+       //await addDoc(messagesCollectionRef, {test: "travvy u did it again!"})
+       // important variables to send to chat component as prop
+       // data = userschatdata, sender = userID, recipient= friendID
+       // send ref?
+
+       navigation.navigate("Chat");
     }
 
     const user = getAuth().currentUser;
@@ -37,7 +58,7 @@ const Chats = () => {
         friendsList.forEach((friend) => {
             friendsArr.push(friend.data());
         });
-        console.log(friendsArr)
+        //console.log(friendsArr)
         const friendCards = friendsArr.map((friend) => {
             return (
                 <View key={friend.id} style={{alignItems: 'center', width: '50%', marginBottom: 5, marginTop: 10}} >
