@@ -115,7 +115,7 @@ const Requests = () => {
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', alignItems: 'center', height: 80, backgroundColor: '#f0f0f0', justifyContent: 'center' }}>
-                <TouchableOpacity style={{ paddingHorizontal: 6 }} onPress={() => navigation.goBack()}>
+                <TouchableOpacity style={{ paddingHorizontal: 6 }} >
                     <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 20 }}>{'<'}</Text>
                 </TouchableOpacity>
                 <Text style={{ flex: 1, fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginTop: 25 }}>Requests</Text>

@@ -35,22 +35,28 @@ const Chats = () => {
     
         const usersChatRef = queryDoc.docs.map((doc) => doc)[0].ref;
         const usersChatData = queryDoc.docs.map((doc) => doc)[0].data();
-        console.log(usersChatData)
+        //console.log(usersChatData)
         //await updateDoc(usersChatRef, {text: "Travvy you did it!"})
         const messagesCollectionRef = collection(usersChatRef, "messages");
         
-            // for adding new messages
+    // for adding new messages
        //await addDoc(messagesCollectionRef, {test: "travvy u did it again!"})
        // important variables to send to chat component as prop
        // data = userschatdata, sender = userID, recipient= friendID
        // send ref?
-
-       navigation.navigate("Chat");
+       navigation.navigate("Chat", {
+        usersChatRef: usersChatRef,
+        messagesCollectionRef: messagesCollectionRef,
+        usersChatData: usersChatData,
+        currentUserID: userID,
+        friendID: friendID,
+        friendImg: friend.friendPhotoURL,
+        friendName: friend.friendDisplayName
+       });
     }
 
     const user = getAuth().currentUser;
     const userID = user.uid;
-
     async function getFriends() {
         const friendsListCollection = collection(promptyDB, 'users', userID, 'friends');
         const friendsList = await getDocs(friendsListCollection)
@@ -69,7 +75,7 @@ const Chats = () => {
                                 </TouchableOpacity>
                             </ImageBackground>
                         </View>
-                        <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center', color: 'white', marginTop: 5}}>@{friend.friendDisplayName}</Text>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center', color: '#24366F', marginTop: 5}}>@{friend.friendDisplayName}</Text>
                     </View>
             );
         });
@@ -95,7 +101,7 @@ const Chats = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#24366F'
+        backgroundColor: '#E2E6F3'
     },
     header: {
         flexDirection: 'row', 

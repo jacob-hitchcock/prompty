@@ -36,7 +36,7 @@ const Login = () => {
         signInWithEmailAndPassword(authentication, email, password)
         .then((res) => {
             //console.log(res);
-            navigation.navigate('Account');
+            navigation.navigate('Chats');
         })
         .catch((res) => {
             console.log(res);

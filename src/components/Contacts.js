@@ -60,12 +60,10 @@ const Contacts = () => {
     return (
         <View style={styles.container}>
             <View style={styles.searchBarView}>
-                <SearchBar containerStyle={styles.containerStyle}  cancelButtonProps={{color: 'white'}} platform='ios' placeholder='username' onChangeText={text => searchUsers(text)} value={searchTerm}></SearchBar>
+                <SearchBar containerStyle={styles.containerStyle}  cancelButtonProps={{color: '#24366F'}} platform='ios' placeholder='username' onChangeText={text => searchUsers(text)} value={searchTerm}></SearchBar>
                 {resultView}
             <Image source={{uri: ''}}></Image>
             </View>
-
-
             <ScrollView style={styles.secondView}>
                 <Text> Hello</Text>
             </ScrollView>
@@ -76,11 +74,11 @@ const Contacts = () => {
 
 const styles = StyleSheet.create({
     topContainer: {
-        backgroundColor: '#24366F'
+        backgroundColor: '#E2E6F3'
     },
     container: {
         flex: 1,
-        backgroundColor: '#24366F',
+        backgroundColor: '#E2E6F3',
         justifyContent: 'flex-start',
         alignItems: 'center',
         paddingTop: 60
@@ -93,12 +91,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontFamily: 'Roboto',
         fontSize: 20,
-        marginTop: 15,
-        color: 'white'
+        marginTop: 5,
+        color: '#24366F',
+        fontWeight: 'bold'
     },
     searchBarView: {
         flex: 1,
-        backgroundColor: '#24366F'
+        backgroundColor: '#E2E6F3'
     },
     containerStyle: {
         backgroundColor: 'transparent',
@@ -109,7 +108,7 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200,
         borderWidth: 15,
-        borderColor: '#E2E6F3',
+        borderColor: '#24366F',
         borderRadius: 20
     },
     secondView : {
