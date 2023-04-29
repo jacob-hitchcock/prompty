@@ -20,13 +20,14 @@ const Chat = ({route}) => {
 
     const navigation = useNavigation();
     const [messages, setMessages] = useState({});
-    
+
+    // I wrote this effect hook myself and chatGPT helped me debug an undetected error with setMessages
     useEffect(() => {
         const messagesQuery = query(messagesCollectionRef, orderBy("createdAt", "desc"));
         const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
           const messages = snapshot.docs.map(doc => {
             const messageToBePushed = {id: doc.id, ...doc.data()};
-            // Remove the extra quotes around date string
+            // Remove the extra quotes around date and namestring
             messageToBePushed.createdAt = messageToBePushed.createdAt.slice(1, -1);
             return messageToBePushed;
           });
@@ -35,66 +36,11 @@ const Chat = ({route}) => {
         return unsubscribe;
       }, []);
     
-// the problem was that I was calling setstate inside of the onsnapshot callback
-
-
-    /* 
-        useEffect(() => {
-        const messagesQuery = query(messagesCollectionRef, orderBy("createdAt", "desc"));
-        const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-          const messages = snapshot.docs.map(doc => {
-            const messageToBePushed = {id: doc.id, ...doc.data()};
-            // Remove the extra quotes around date string
-            messageToBePushed.createdAt = messageToBePushed.createdAt.slice(1, -1);
-            return messageToBePushed;
-          });
-          setMessages(messages);
-        });
-        return unsubscribe;
-      }, []);
-    
-    */
-
-
-    // make onSnapshot event listener?
- 
-    /*
-    async function getMessages() {
-        // need ref to collection
-        const messagesQuery = query(messagesCollectionRef, orderBy("createdAt", "desc"));
-        let messages = [];
-        onSnapshot(messagesQuery, (snapshot) => {
-                console.log("refresh messages")
-                snapshot.forEach((message) => {
-                let messageToBePushed = {id: message.id, ...message.data()};
-                // had to consult chatGPT to remove the extra quotes around date string
-                let dateNoquotes = message.data().createdAt.slice(1, -1);
-                messageToBePushed.createdAt = dateNoquotes;
-                messages.push(messageToBePushed);
-            });
-        });
-        return messages;
-    } */
-
-    // get friend data
-    /*
-    async function getFriendData() {
-        const friendDocRef = doc(promptyDB, "users", friendID);
-        const friendDoc = await getDoc(friendDocRef);
-        let friendData;
-        if (friendDoc.exists()) {
-            friendData = friendDoc.data();
-        }
-       return friendData;
-    }
-    */
-
     // will probably need to take a message object or something
     // sender, recipient, timestamp, content, text? or is text within content
     async function sendMessage(newMessages = []) {
         console.log("about to send message");
         const newMessage = newMessages[0];
-
         let messageDoc = {
             senderID: currentUserID,
             recipientID: friendID,
@@ -102,20 +48,9 @@ const Chat = ({route}) => {
             type: 'non-prompt',
             ...newMessage
         }
-
-        //messageDoc.createdAt = messageDoc.createdAt
         const dateAsString = JSON.stringify(messageDoc.createdAt);
-        //console.log(dateAsString)
         messageDoc.createdAt = dateAsString;
         await addDoc(messagesCollectionRef, messageDoc); 
-            // newMessages[0] has:
-                // _id
-                // createdAt
-                // text
-                // also has a user object which is empty if not set
-
-           
-        console.log("message sent!");
     }
 
     return(
