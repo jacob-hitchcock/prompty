@@ -9,36 +9,75 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 
 const Chat = ({route}) => {
+    const user = getAuth().currentUser;
+    const userProfile = user.photoURL;
+    const username = user.displayName;
+ 
     const {usersChatRef, messagesCollectionRef, usersChatData, currentUserID, friendID, friendImg, friendName} = route.params;
-    //console.log(usersChatData);
+
     const navigation = useNavigation();
     const [messages, setMessages] = useState({});
+    
+    useEffect(() => {
+        const messagesQuery = query(messagesCollectionRef, orderBy("createdAt", "desc"));
+        const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+          const messages = snapshot.docs.map(doc => {
+            const messageToBePushed = {id: doc.id, ...doc.data()};
+            // Remove the extra quotes around date string
+            messageToBePushed.createdAt = messageToBePushed.createdAt.slice(1, -1);
+            return messageToBePushed;
+          });
+          setMessages(messages);
+        });
+        return unsubscribe;
+      }, []);
+    
+// the problem was that I was calling setstate inside of the onsnapshot callback
 
-    useEffect(async () => {
-        const data = await getMessages();
-        setMessages(data);
-    }, []);
+
+    /* 
+        useEffect(() => {
+        const messagesQuery = query(messagesCollectionRef, orderBy("createdAt", "desc"));
+        const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+          const messages = snapshot.docs.map(doc => {
+            const messageToBePushed = {id: doc.id, ...doc.data()};
+            // Remove the extra quotes around date string
+            messageToBePushed.createdAt = messageToBePushed.createdAt.slice(1, -1);
+            return messageToBePushed;
+          });
+          setMessages(messages);
+        });
+        return unsubscribe;
+      }, []);
+    
+    */
+
 
     // make onSnapshot event listener?
  
+    /*
     async function getMessages() {
         // need ref to collection
-        //await getDocs(messagesCollectionRef);
-        const messagesQuery = query(messagesCollectionRef, orderBy("timeStamp", "desc"));
+        const messagesQuery = query(messagesCollectionRef, orderBy("createdAt", "desc"));
         let messages = [];
         onSnapshot(messagesQuery, (snapshot) => {
                 console.log("refresh messages")
                 snapshot.forEach((message) => {
-                messages.push({id: message.id, ...message.data()});
+                let messageToBePushed = {id: message.id, ...message.data()};
+                // had to consult chatGPT to remove the extra quotes around date string
+                let dateNoquotes = message.data().createdAt.slice(1, -1);
+                messageToBePushed.createdAt = dateNoquotes;
+                messages.push(messageToBePushed);
             });
         });
-        console.log("messages: " + messages)
         return messages;
-    }
+    } */
 
     // get friend data
+    /*
     async function getFriendData() {
         const friendDocRef = doc(promptyDB, "users", friendID);
         const friendDoc = await getDoc(friendDocRef);
@@ -48,30 +87,34 @@ const Chat = ({route}) => {
         }
        return friendData;
     }
-
+    */
 
     // will probably need to take a message object or something
     // sender, recipient, timestamp, content, text? or is text within content
     async function sendMessage(newMessages = []) {
+        console.log("about to send message");
         const newMessage = newMessages[0];
-        //console.log(newMessages[0]);
 
-        //await addDoc(messagesCollectionRef, newMessage);
-        
-        await addDoc(messagesCollectionRef, 
+        let messageDoc = {
+            senderID: currentUserID,
+            recipientID: friendID,
+            content: '',
+            type: 'non-prompt',
+            ...newMessage
+        }
+
+        //messageDoc.createdAt = messageDoc.createdAt
+        const dateAsString = JSON.stringify(messageDoc.createdAt);
+        //console.log(dateAsString)
+        messageDoc.createdAt = dateAsString;
+        await addDoc(messagesCollectionRef, messageDoc); 
             // newMessages[0] has:
                 // _id
                 // createdAt
                 // text
                 // also has a user object which is empty if not set
-            {
-            senderID: currentUserID,
-            recipientID: friendID,
-            timeStamp: serverTimestamp(),
-            content: '',
-            type: 'non-prompt',
-            ...newMessage
-            }); 
+
+           
         console.log("message sent!");
     }
 
@@ -89,7 +132,9 @@ const Chat = ({route}) => {
                     <GiftedChat 
                         messages={messages} 
                         onSend={sendMessage} 
-                        user={{_id: currentUserID,
+                        user={{_id: currentUserID, 
+                            avatar: userProfile,
+                            name: username
                         }}
                         />
                 </View>
