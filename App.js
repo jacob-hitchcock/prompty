@@ -24,8 +24,7 @@ LogBox.ignoreAllLogs(true);
 const App = () => {
   const [firstTimeLaunched, setFirstTimeLaunched] = React.useState(null);
   const [signedIn, setSignedIn] = useState(false);
- 
-
+  
   useEffect(() => {
     AsyncStorage.getItem('alreadyLaunched').then(value => {
       if (value == null) {
@@ -63,7 +62,7 @@ const App = () => {
             ...TransitionPresets.ModalFadeTransition, title: "Chats"
           }} />
           <Stack.Screen name="Chat" component={Chat} options={{
-          ...TransitionPresets.ModalFadeTransition, title: 'Chat'
+          ...TransitionPresets.ModalFadeTransition, title: 'Chat',
         }} />
           <Stack.Screen name="Contacts" component={Contacts} options={{
             ...TransitionPresets.ModalFadeTransition,

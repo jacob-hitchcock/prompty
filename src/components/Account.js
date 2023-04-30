@@ -9,24 +9,14 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 const Account = () => {
-   
     const navigation = useNavigation();
     const route = useRoute();
-   
-    // May want to set a condition for whether user has a profile
-    // pic or not
-    // if not, set the image to the blank image
-    // if do, initialize it to the profile pic they have 
-    // in the returned component, have the image's source be the variable for image
-   
     const auth = getAuth();
     const user = auth.currentUser;
-    //console.log("name: " + user.displayName);
-    //console.log("photo: " + user.photoURL);
     if (user) {
         displayName = user.displayName;
     }
-    //console.log(displayName)
+
     const [image, setImage] = useState(user.photoURL);
     /*async function getPrompts() {
         const promptSnapshot = await getDocs(collection(promptyDB, "prompts"));
