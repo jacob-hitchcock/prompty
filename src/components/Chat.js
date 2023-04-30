@@ -130,11 +130,17 @@ const Chat = ({route}) => {
                   backgroundColor: '#23356F',
                   borderRadius: 15,
                   marginBottom: 5,
+                  borderTopRightRadius: 15,
+                  borderTopLeftRadius: 15,
+                  borderBottomRightRadius: 15
                 },
                 left: {
                   backgroundColor: '#E2E6F3',
                   borderRadius: 15,
-                  marginBottom: 5
+                  marginBottom: 5,
+                  borderTopRightRadius: 15,
+                  borderTopLeftRadius: 15,
+                  borderBottomLeftRadius: 15
                 },
               }}
               textStyle={{
