@@ -13,6 +13,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Input } from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import { Alert } from 'react-native';
 
 
 const Chat = ({route}) => {
@@ -43,6 +44,7 @@ const Chat = ({route}) => {
     
     async function sendMessage(newMessages = []) {
         const newMessage = newMessages[0];
+        console.log(newMessage)
         let messageDoc = {
             senderID: currentUserID,
             recipientID: friendID,
@@ -73,7 +75,6 @@ const Chat = ({route}) => {
     }
 
     async function handlePrompts() {
-        console.log("prompty")
         const promptCollectionRef = collection(promptyDB, "prompts");
         const promptDocs = await getDocs(promptCollectionRef).then((snapshot) => {
             let prompts = [];
@@ -89,11 +90,36 @@ const Chat = ({route}) => {
         // consulted ChatGPT for random number generation
         const randomPromptIndex = Math.floor(Math.random() * promptDocs.length);
         const randomPrompt = promptDocs[randomPromptIndex];
-        console.log(randomPrompt.prompt)
         const randomPromptText = randomPrompt.prompt;
         const randomPromptId = randomPrompt.id;
         console.log(randomPromptId + ": " + randomPromptText);
-        ;
+        Alert.alert(
+            'Send Prompt?',
+            `${randomPromptText}`,
+        [{ text: 'Cancel', onPress: () => console.log('Cancel Pressed') },
+        { text: 'Send', onPress: () => sendPrompt(randomPromptId, randomPromptText)}
+        ],
+        );
+    }
+
+    async function sendPrompt(randomPromptId, randomPromptText) {
+        const user = {_id: currentUserID, 
+            avatar: userProfile,
+            name: username
+        }
+        // chatGPT helped with generating randomID with timestamp
+            // and random number
+        const timestamp = new Date().getTime();
+        const randomNumber = Math.floor(Math.random() * 1000000);
+        const uniqueId = `${timestamp}-${randomNumber}`;
+        const promptDoc = {
+            _id: uniqueId,
+            createdAt: JSON.stringify(timestamp),
+            text: randomPromptText,
+            type: 'prompt',
+            user: user
+        }
+        await addDoc(messagesCollectionRef, promptDoc); 
     }
 
     // ChatGPT helped with this function
@@ -128,7 +154,7 @@ const Chat = ({route}) => {
                 <Bubble {...props}
                 wrapperStyle={{
                     right: {
-                      backgroundColor: '#0084ff',
+                      backgroundColor: '#23356F',
                       borderRadius: 15,
                       marginBottom: 5,
                       borderTopRightRadius: 15,
@@ -137,7 +163,7 @@ const Chat = ({route}) => {
                       height: 90
                     },
                     left: {
-                      backgroundColor: '#0084ff',
+                      backgroundColor: '#23356F',
                       borderRadius: 15,
                       marginBottom: 5,
                       borderTopRightRadius: 15,
@@ -148,12 +174,12 @@ const Chat = ({route}) => {
                   }}
                   textStyle={{
                     right: {
-                      color: '#23356F',
+                      color: 'white',
                       fontFamily: 'Helvetica',
                       fontWeight: 'bold'
                     },
                     left: {
-                      color: '#23356F',
+                      color: 'white',
                       fontFamily: 'Helvetica',
                       fontWeight: 'bold'
                     },
@@ -165,7 +191,7 @@ const Chat = ({route}) => {
                 <Bubble {...props}
                 wrapperStyle={{
                     right: {
-                      backgroundColor: '#23356F',
+                      backgroundColor: '#6D7EB6',
                       borderRadius: 15,
                       marginBottom: 5,
                       borderTopRightRadius: 15,
@@ -183,7 +209,7 @@ const Chat = ({route}) => {
                   }}
                   textStyle={{
                     right: {
-                      color: '#E2E6F3',
+                      color: 'white',
                       fontFamily: 'Helvetica',
                     },
                     left: {
@@ -194,7 +220,6 @@ const Chat = ({route}) => {
                 />
             );
         }
-        
     }   
 
     function renderSend(props) {
@@ -243,8 +268,7 @@ const Chat = ({route}) => {
                     <MaterialCommunityIcons name="message-text-outline" color="#24366F" size={70} />
                     <Text style={styles.buttonText}>Prompts</Text>
                     </TouchableOpacity>
-                </View>
-                        
+                </View>  
                 </View>
          
       </View>
