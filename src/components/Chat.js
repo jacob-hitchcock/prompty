@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { GiftedChat, InputToolbar, ChatInput, SendButton, Bubble, Send} from 'react-native-gifted-chat';
 import { StyleSheet,View,Text,ImageBackground,Image,TouchableOpacity,TextInput, ScrollView , Button} from 'react-native';
 import Navbar from './Navbar';
-import { doc, getDoc, updateDoc, get, query, where, collection, getDocs, setDoc, addDoc, deleteDoc, serverTimestamp, orderBy, limit, onSnapshot, QuerySnapshot} from "firebase/firestore";
+import { doc, getDoc, updateDoc, get, query, where, collection, getDocs, setDoc, addDoc, deleteDoc, serverTimestamp, orderBy, limit, onSnapshot, QuerySnapshot } from "firebase/firestore";
 import {getAuth } from "firebase/auth";
 import { promptyDB, promptyStorage} from '../../firebase';
 import { useNavigation } from '@react-navigation/native';
@@ -114,8 +114,8 @@ const Chat = ({route}) => {
             avatar: userProfile,
             name: username
         }
-
-
+        const currentTime = new Date();
+        const formattedTime = currentTime.toISOString();
 
         // chatGPT helped with generating randomID with timestamp
             // and random number
@@ -124,7 +124,7 @@ const Chat = ({route}) => {
         const uniqueId = `${timestamp}-${randomNumber}`;
         const promptDoc = {
             _id: uniqueId,
-            createdAt: JSON.stringify(timestamp),
+            createdAt: JSON.stringify(formattedTime),
             text: randomPromptText,
             type: 'prompt',
             user: user
