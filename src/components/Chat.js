@@ -20,31 +20,31 @@ const Chat = ({route}) => {
     const user = getAuth().currentUser;
     const userProfile = user.photoURL;
     const username = user.displayName;
- 
-    const {usersChatRef, messagesCollectionRef, usersChatData, currentUserID, friendID, friendImg, friendName} = route.params;
+    const {usersChatRef, messagesCollectionRef, 
+        usersChatData, currentUserID, friendID, 
+        friendImg, friendName} = route.params;
 
     const navigation = useNavigation();
     const [messages, setMessages] = useState({});
-    const [chatMedia, setChatMedia] = useState('');
+    //const [chatMedia, setChatMedia] = useState('');
 
     // I wrote this effect hook myself and chatGPT helped me debug an undetected error with setMessages
     useEffect(() => {
         const messagesQuery = query(messagesCollectionRef, orderBy("createdAt", "desc"));
         const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-          const messages = snapshot.docs.map(doc => {
-            const messageToBePushed = {id: doc.id, ...doc.data()};
-            // Remove the extra quotes around date and namestring
-            messageToBePushed.createdAt = messageToBePushed.createdAt.slice(1, -1);
-            return messageToBePushed;
+                const messages = snapshot.docs.map(doc => {
+                const messageToBePushed = {id: doc.id, ...doc.data()};
+                messageToBePushed.createdAt = messageToBePushed.createdAt.slice(1, -1);
+                return messageToBePushed;
           });
-          setMessages(messages);
+        setMessages(messages);
         });
         return unsubscribe;
       }, []);
     
     async function sendMessage(newMessages = []) {
         const newMessage = newMessages[0];
-        console.log(newMessage)
+        //console.log(newMessage)
         let messageDoc = {
             senderID: currentUserID,
             recipientID: friendID,
@@ -52,30 +52,14 @@ const Chat = ({route}) => {
             type: 'non-prompt',
             ...newMessage
         }
-        
-        // ChatGPT helped with this block
-        let mediaURL = '';
-        if (chatMedia) { // result.assets[0].uri
-            const blob = await chatMedia.blob();
-            const mediaCollectionRef = ref(promptyStorage, "chatMedia");
-            const mediaRef = ref(mediaCollectionRef, `${newMessage._id}`);
-            uploadBytes(mediaRef, blob).then(async (snapshot) => {
-                mediaURL = await getDownloadURL(mediaRef);
-                console.log(messageDoc)
-                console.log(mediaURL)
-            }).catch((error) => {
-                console.log("Error: " + error);
-            });
-        }
-        //console.log(messageDoc);
         const dateAsString = JSON.stringify(messageDoc.createdAt);
         messageDoc.createdAt = dateAsString;
-        messageDoc.mediaURL = mediaURL;
         await addDoc(messagesCollectionRef, messageDoc); 
     }
 
     async function handlePrompts() {
-        /*
+        /* Might use this for later for storing promptID in chat array "prompts"
+            // to check whether a prompt has already been used. If so, generate another one
         const chatsCollectionRef = collection(promptyDB, "chats");
         const chatQuery = query(chatsCollectionRef, where("participant1", "in", [currentUserID, friendID]), where("participant2", "in", [currentUserID, friendID]));
         const queryDoc = await getDocs(chatQuery);
@@ -99,7 +83,7 @@ const Chat = ({route}) => {
         const randomPrompt = promptDocs[randomPromptIndex];
         const randomPromptText = randomPrompt.prompt;
         const randomPromptId = randomPrompt.id;
-        console.log(randomPromptId + ": " + randomPromptText);
+        //console.log(randomPromptId + ": " + randomPromptText);
         Alert.alert(
             'Send Prompt?',
             `${randomPromptText}`,
@@ -133,7 +117,11 @@ const Chat = ({route}) => {
     }
 
     // ChatGPT helped with this function
-    async function handleImages() {
+    async function handleMedia() {
+        const user = {_id: currentUserID, 
+            avatar: userProfile,
+            name: username
+        }
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync().catch((error) => {
             console.log("Error: " + error);
            });
@@ -141,7 +129,6 @@ const Chat = ({route}) => {
           alert('Permission to access media library is required!');
           return;
         }
-        // Opens camera roll library, allows user to select image
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
@@ -151,14 +138,42 @@ const Chat = ({route}) => {
             console.log("Error: " + error);
            });
           if (!result.canceled) {
-            const res = await fetch(result.assets[0].uri).catch((error) => {
+                const res = await fetch(result.assets[0].uri).catch((error) => {
                 console.log("Error: " + error);
             });
-            setChatMedia(res);
+             // ChatGPT helped with this block
+            let mediaURL = '';
+
+             // Consulted ChatGPT to generate random, unique ID
+            const timestamp = new Date().getTime();
+            const randomNumber = Math.floor(Math.random() * 1000000);
+            const uniqueId = `${timestamp}-${randomNumber}`;
+            const currentTime = new Date();
+            const formattedTime = currentTime.toISOString();
+       
+            const blob = await res.blob();
+            const mediaCollectionRef = ref(promptyStorage, "chatMedia");
+            const mediaRef = ref(mediaCollectionRef, uniqueId);
+            uploadBytes(mediaRef, blob).then(async (snapshot) => {
+                mediaURL = await getDownloadURL(mediaRef);
+                //console.log(mediaURL)
+                const mediaDoc = {
+                    _id: uniqueId,
+                    createdAt: JSON.stringify(formattedTime),
+                    content: mediaURL,
+                    user: user
+                }
+                await addDoc(messagesCollectionRef, mediaDoc); 
+            }).catch((error) => {
+                console.log("Error: " + error);
+            });
         }
     }
-    //ChatGPT helped with styling
+
+    //ChatGPT helped with styling. 
+    // I chose the styling, but it helped me learn the format
     function renderBubble(props) {
+        
         if (props.currentMessage.type === "prompt") {
             return (
                 <Bubble {...props}
@@ -200,6 +215,12 @@ const Chat = ({route}) => {
                   }}
                 />
             );
+        } else if(props.currentMessage.content) {
+            return (
+               <Image style={{ width: 200, height: 200, borderRadius: 15, marginBottom: 5}}
+                source={{ uri: props.currentMessage.content}}/>
+            );
+        } else if(props.currentMessage.content) { 
         } else {
             return (
                 <Bubble {...props}
@@ -248,6 +269,29 @@ const Chat = ({route}) => {
         );
     }
 
+    // ChatGPT helped with rendering images
+    function renderMessageImage(props) {
+        return (
+          <Image
+            source={{ uri: props.currentMessage.image }}
+            style={{ width: 200, height: 200 }}
+            resizeMode="cover"
+          />
+        );
+      };
+      
+      // ChatGPT helped with rendering videos
+      function renderMessageVideo(props) {
+        return (
+          <Video
+            source={{ uri: props.currentMessage.video }}
+            style={{ width: 200, height: 200 }}
+            resizeMode="cover"
+            controls={true}
+          />
+        );
+      };
+
     function renderScrolltoBottom() {
         return(
             <FontAwesome5Icon name="angle-double-down" size={22} color= '#24366F'></FontAwesome5Icon>
@@ -269,24 +313,24 @@ const Chat = ({route}) => {
                         scrollToBottom
                         scrollToBottomComponent={renderScrolltoBottom}
                         renderSend={renderSend}
+                        renderMessageImage={renderMessageImage}
+                        renderMessageVideo={renderMessageVideo}
                         user={{_id: currentUserID, 
                             avatar: userProfile,
                             name: username
                         }} 
                     />
                 <View style={styles.bottomOptions}>
-                <TouchableOpacity style={styles.imagePicker} onPress={handleImages}>
+                <TouchableOpacity style={styles.imagePicker} onPress={handleMedia}>
                     <MaterialCommunityIcons name="image-multiple" color="#24366F" size={70} />
                     <Text style={styles.buttonText}>Media</Text>
                     </TouchableOpacity>
-
                     <TouchableOpacity style={styles.prompts} onPress={handlePrompts}>
                     <MaterialCommunityIcons name="message-text-outline" color="#24366F" size={70} />
                     <Text style={styles.buttonText}>Prompts</Text>
                     </TouchableOpacity>
                 </View>  
                 </View>
-         
       </View>
     
     );
