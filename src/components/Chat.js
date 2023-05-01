@@ -123,39 +123,78 @@ const Chat = ({route}) => {
     }
     //ChatGPT helped with styling
     function renderBubble(props) {
-        console.log("current: " + props.currentMessage.type);
-        return (
-            <Bubble {...props}
-            wrapperStyle={{
-                right: {
-                  backgroundColor: '#23356F',
-                  borderRadius: 15,
-                  marginBottom: 5,
-                  borderTopRightRadius: 15,
-                  borderTopLeftRadius: 15,
-                  borderBottomRightRadius: 15
-                },
-                left: {
-                  backgroundColor: '#E2E6F3',
-                  borderRadius: 15,
-                  marginBottom: 5,
-                  borderTopRightRadius: 15,
-                  borderTopLeftRadius: 15,
-                  borderBottomLeftRadius: 15
-                },
-              }}
-              textStyle={{
-                right: {
-                  color: '#E2E6F3',
-                  fontFamily: 'Helvetica',
-                },
-                left: {
-                  color: '#23356F',
-                  fontFamily: 'Helvetica',
-                },
-              }}
-            />
-        );
+        if (props.currentMessage.type === "prompt") {
+            return (
+                <Bubble {...props}
+                wrapperStyle={{
+                    right: {
+                      backgroundColor: '#0084ff',
+                      borderRadius: 15,
+                      marginBottom: 5,
+                      borderTopRightRadius: 15,
+                      borderTopLeftRadius: 15,
+                      borderBottomRightRadius: 15,
+                      height: 90
+                    },
+                    left: {
+                      backgroundColor: '#0084ff',
+                      borderRadius: 15,
+                      marginBottom: 5,
+                      borderTopRightRadius: 15,
+                      borderTopLeftRadius: 15,
+                      borderBottomLeftRadius: 15,
+                      height: 90,
+                    },
+                  }}
+                  textStyle={{
+                    right: {
+                      color: '#23356F',
+                      fontFamily: 'Helvetica',
+                      fontWeight: 'bold'
+                    },
+                    left: {
+                      color: '#23356F',
+                      fontFamily: 'Helvetica',
+                      fontWeight: 'bold'
+                    },
+                  }}
+                />
+            );
+        } else {
+            return (
+                <Bubble {...props}
+                wrapperStyle={{
+                    right: {
+                      backgroundColor: '#23356F',
+                      borderRadius: 15,
+                      marginBottom: 5,
+                      borderTopRightRadius: 15,
+                      borderTopLeftRadius: 15,
+                      borderBottomRightRadius: 15
+                    },
+                    left: {
+                      backgroundColor: '#E2E6F3',
+                      borderRadius: 15,
+                      marginBottom: 5,
+                      borderTopRightRadius: 15,
+                      borderTopLeftRadius: 15,
+                      borderBottomLeftRadius: 15
+                    },
+                  }}
+                  textStyle={{
+                    right: {
+                      color: '#E2E6F3',
+                      fontFamily: 'Helvetica',
+                    },
+                    left: {
+                      color: '#23356F',
+                      fontFamily: 'Helvetica',
+                    },
+                  }}
+                />
+            );
+        }
+        
     }   
 
     function renderSend(props) {

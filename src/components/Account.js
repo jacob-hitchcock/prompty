@@ -95,11 +95,7 @@ const Account = () => {
            }).catch((error) => {
             console.log("error: " + error);
            });
-/* 
-const mediaCollectionRef = ref(promptyStorage, "chatMedia");
-            const mediaRef = ref(mediaCollectionRef, `${newMessage._id}`);
 
-*/
         /* Save it in document representing user, to render their profile 
            picture for other users when they search and view their profile */
         const userDoc = doc(promptyDB, "users", user.uid);
@@ -179,7 +175,7 @@ const styles = StyleSheet.create({
     },
     info: { 
         fontSize: 20,
-        color: '#27292E',
+        color: '#24366F',
         marginBottom: 30,
         fontWeight: 'bold'
     },
