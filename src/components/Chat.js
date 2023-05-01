@@ -75,6 +75,13 @@ const Chat = ({route}) => {
     }
 
     async function handlePrompts() {
+        /*
+        const chatsCollectionRef = collection(promptyDB, "chats");
+        const chatQuery = query(chatsCollectionRef, where("participant1", "in", [currentUserID, friendID]), where("participant2", "in", [currentUserID, friendID]));
+        const queryDoc = await getDocs(chatQuery);
+        const usersChatRef = queryDoc.docs.map((doc) => doc)[0].ref;
+        const usersChatData = queryDoc.docs.map((doc) => doc)[0].data();
+        const promptArray = usersChatData.prompts; */
         const promptCollectionRef = collection(promptyDB, "prompts");
         const promptDocs = await getDocs(promptCollectionRef).then((snapshot) => {
             let prompts = [];
@@ -107,6 +114,9 @@ const Chat = ({route}) => {
             avatar: userProfile,
             name: username
         }
+
+
+
         // chatGPT helped with generating randomID with timestamp
             // and random number
         const timestamp = new Date().getTime();
@@ -179,6 +189,7 @@ const Chat = ({route}) => {
                       color: 'white',
                       fontFamily: 'Helvetica',
                       fontWeight: 'bold',
+                      textAlign: 'center',
                     },
                     left: {
                       color: 'white',
