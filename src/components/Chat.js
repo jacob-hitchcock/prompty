@@ -160,28 +160,31 @@ const Chat = ({route}) => {
                       borderTopRightRadius: 15,
                       borderTopLeftRadius: 15,
                       borderBottomRightRadius: 15,
-                      height: 90
+                      height: 100,
+                      justifyContent: 'center'
                     },
                     left: {
-                      backgroundColor: '#23356F',
+                      backgroundColor: '#0084ff',
                       borderRadius: 15,
                       marginBottom: 5,
                       borderTopRightRadius: 15,
                       borderTopLeftRadius: 15,
                       borderBottomLeftRadius: 15,
-                      height: 90,
+                      height: 100,
+                      justifyContent: 'center'
                     },
                   }}
                   textStyle={{
                     right: {
                       color: 'white',
                       fontFamily: 'Helvetica',
-                      fontWeight: 'bold'
+                      fontWeight: 'bold',
                     },
                     left: {
                       color: 'white',
                       fontFamily: 'Helvetica',
-                      fontWeight: 'bold'
+                      fontWeight: 'bold',
+                      textAlign: 'center',
                     },
                   }}
                 />
@@ -196,7 +199,8 @@ const Chat = ({route}) => {
                       marginBottom: 5,
                       borderTopRightRadius: 15,
                       borderTopLeftRadius: 15,
-                      borderBottomRightRadius: 15
+                      borderBottomRightRadius: 15,
+                      justifyContent: 'center'
                     },
                     left: {
                       backgroundColor: '#E2E6F3',
@@ -204,7 +208,8 @@ const Chat = ({route}) => {
                       marginBottom: 5,
                       borderTopRightRadius: 15,
                       borderTopLeftRadius: 15,
-                      borderBottomLeftRadius: 15
+                      borderBottomLeftRadius: 15,
+                      justifyContent: 'center'
                     },
                   }}
                   textStyle={{
