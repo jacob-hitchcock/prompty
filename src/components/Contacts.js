@@ -15,9 +15,6 @@ const Contacts = () => {
         const auth = getAuth();
         const user = auth.currentUser;
         const currentID = user.uid;
-
-        // gets reference to friend request collection
-       
         const requestRef = doc(promptyDB, "friendRequests", userID, "receivedRequests", currentID);
 
         await setDoc(requestRef, {
@@ -31,7 +28,6 @@ const Contacts = () => {
     }
 
     async function searchUsers(username) {
-    //console.log(username);
         setSearchTerm(username);
         const usersRef = collection(promptyDB, "users");
         const userQuery = query(usersRef, where("username", "==", username))
@@ -41,7 +37,6 @@ const Contacts = () => {
     }
    
     let resultView;
-    //console.log(searchResults);
     
     if (searchResults.length > 0) {
         resultView = 
@@ -53,7 +48,6 @@ const Contacts = () => {
             <View style={styles.button}>
                 <Button title='Send Request' onPress={() => sendFriendRequest(searchResults[0].userId)}></Button>
             </View>
-            
         </View>
     }
     
@@ -64,9 +58,7 @@ const Contacts = () => {
                 {resultView}
             <Image source={{uri: ''}}></Image>
             </View>
-            <ScrollView style={styles.secondView}>
-                <Text> Hello</Text>
-            </ScrollView>
+            
             <Navbar />
         </View>
     );
@@ -125,5 +117,4 @@ const styles = StyleSheet.create({
     }
 });
 
-//E2E6F3
 export default Contacts;

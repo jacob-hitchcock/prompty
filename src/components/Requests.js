@@ -8,6 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const Requests = () => {
     const navigation = useNavigation()
@@ -115,8 +116,8 @@ const Requests = () => {
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', alignItems: 'center', height: 80, backgroundColor: '#f0f0f0', justifyContent: 'center' }}>
-                <TouchableOpacity style={{ paddingHorizontal: 6 }} >
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 20 }}>{'<'}</Text>
+                <TouchableOpacity style={{marginTop: 5, marginLeft: 5 }} onPress={() => navigation.goBack()}>
+                    <FontAwesome name="chevron-left" size={30} color='#23356F' />
                 </TouchableOpacity>
                 <Text style={{ flex: 1, fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginTop: 25 }}>Requests</Text>
             </View>
@@ -132,7 +133,7 @@ const Requests = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#24366F'
+        backgroundColor: '#E2E6F3'
     },
     scroll: {
         marginTop: 10,

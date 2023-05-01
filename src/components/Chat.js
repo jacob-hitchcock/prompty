@@ -11,8 +11,9 @@ import * as ImagePicker from 'expo-image-picker';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Input } from 'react-native-elements';
-import Icon from 'react-native-vector-icons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+
 
 const Chat = ({route}) => {
     const user = getAuth().currentUser;
@@ -95,7 +96,6 @@ const Chat = ({route}) => {
         ;
     }
 
-
     // ChatGPT helped with this function
     async function handleImages() {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync().catch((error) => {
@@ -123,6 +123,7 @@ const Chat = ({route}) => {
     }
     //ChatGPT helped with styling
     function renderBubble(props) {
+        console.log("current: " + props.currentMessage.type);
         return (
             <Bubble {...props}
             wrapperStyle={{
@@ -177,12 +178,7 @@ const Chat = ({route}) => {
             <View style={styles.header}>
                 <Image style={styles.friendPic}source={{uri: friendImg}} />
                 <Text style={styles.friendUsername}>@{friendName}</Text>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}><Text style={styles.buttonText}>Back</Text></TouchableOpacity>
-                
-                <TouchableOpacity style={styles.imagePicker} onPress={handleImages}><Text style={styles.buttonText}>Images</Text></TouchableOpacity>
-
-                <TouchableOpacity style={styles.prompts} onPress={handlePrompts}><Text style={styles.buttonText}>Prompts</Text></TouchableOpacity>
-          
+                <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}><FontAwesome name="chevron-left" size={30} color='#23356F' /></TouchableOpacity>
             </View>
                 <View style={styles.chat}>
                     <GiftedChat 
@@ -196,9 +192,20 @@ const Chat = ({route}) => {
                         user={{_id: currentUserID, 
                             avatar: userProfile,
                             name: username
-                        }}
-                        keyboardVerticalOffset={0}
+                        }} 
                     />
+                <View style={styles.bottomOptions}>
+                <TouchableOpacity style={styles.imagePicker} onPress={handleImages}>
+                    <MaterialCommunityIcons name="image-multiple" color="#24366F" size={70} />
+                    <Text style={styles.buttonText}>Media</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.prompts} onPress={handlePrompts}>
+                    <MaterialCommunityIcons name="message-text-outline" color="#24366F" size={70} />
+                    <Text style={styles.buttonText}>Prompts</Text>
+                    </TouchableOpacity>
+                </View>
+                        
                 </View>
          
       </View>
@@ -211,7 +218,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#E2E6F3',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     header: { 
         flex: 1, 
@@ -224,7 +231,6 @@ const styles = StyleSheet.create({
     },
     chat: {
         flex: 3,
-        marginBottom: 40,
         width: "100%",
         backgroundColor: '#F3F3F3'
     },
@@ -240,6 +246,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#24366F'
     },
+    backButton: {
+        position: 'absolute',
+        left: 10,
+        top: 55,
+        padding: 5,
+    },
     button: {
         position: 'absolute',
         left: 10,
@@ -252,25 +264,20 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#23356F'
+        color: '#23356F',
+        textAlign: 'center'
     },
     imagePicker: {
-        position: 'absolute',
-        right: 10,
-        top: 55,
-        borderWidth: 2,
-        borderColor: '#23356F',
-        borderRadius: 5,
-        padding: 5,
+        marginRight: 100
     },
-    prompts: {
-        position: 'absolute',
-        right: 10,
-        bottom: 20,
-        borderWidth: 2,
-        borderColor: '#23356F',
-        borderRadius: 5,
-        padding: 5,
+    bottomOptions: {
+        height: 100,
+        backgroundColor: '#E2E6F3',
+        alignContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        marginBottom: 15
     }
     
 });

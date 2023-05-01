@@ -74,7 +74,8 @@ const Account = () => {
            // create storage reference (this is where you WANT to store the image)
            /* I decided to store it inside a folder called 'profilePictures' and 
            name each image after the unique userID of that person */
-           const profilePictureRef = ref(promptyStorage, `profilePictures/${user.uid}`);
+           const profilePictureCollectionRef = ref(promptyStorage, "profilePictures");
+           const profilePictureRef = ref(profilePictureCollectionRef, user.uid);
 
            uploadBytes(profilePictureRef, blob).then((snapshot) => {
             //console.log('uploaded image');
@@ -94,7 +95,11 @@ const Account = () => {
            }).catch((error) => {
             console.log("error: " + error);
            });
+/* 
+const mediaCollectionRef = ref(promptyStorage, "chatMedia");
+            const mediaRef = ref(mediaCollectionRef, `${newMessage._id}`);
 
+*/
         /* Save it in document representing user, to render their profile 
            picture for other users when they search and view their profile */
         const userDoc = doc(promptyDB, "users", user.uid);
