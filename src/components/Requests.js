@@ -47,13 +47,12 @@ const Requests = () => {
                         </Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={{ fontSize: 20,fontWeight: 'bold',textAlign: 'center',color: '#24366F' }}>@{currentReq.senderDisplayName}</Text>
                 </View>
             );
         });
         if(requestsArr.length < 1) {
             return (
-                <View style={{ flex: 1,width: '100%',alignItems: 'center',marginTop: 50 }}>
+                <View style={{ flex: 1,width: '100%',alignItems: 'center',marginTop: 250 }}>
                     <Text style={{ fontSize: 20,fontWeight: 'bold',color: '#23356F' }}>No Current Requests</Text>
                 </View>
             )

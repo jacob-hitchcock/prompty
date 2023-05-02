@@ -303,39 +303,42 @@ const Chat = ({ route }) => {
     }
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Image style={styles.friendPic} source={{ uri: friendImg }} />
-                <Text style={styles.friendUsername}>@{friendName}</Text>
-                <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}><FontAwesome name="chevron-left" size={30} color='#23356F' /></TouchableOpacity>
-            </View>
-            <View style={styles.chat}>
-                <GiftedChat
-                    messages={messages}
-                    onSend={sendMessage}
-                    renderBubble={renderBubble}
-                    alwaysShowSend
-                    scrollToBottom
-                    scrollToBottomComponent={renderScrolltoBottom}
-                    renderSend={renderSend}
-                    renderMessageImage={renderMessageImage}
-                    renderMessageVideo={renderMessageVideo}
-                    user={{
-                        _id: currentUserID,
-                        avatar: userProfile,
-                        name: username
-                    }}
-                />
-                <View style={styles.bottomOptions}>
-                    <TouchableOpacity style={styles.imagePicker} onPress={handleMedia}>
-                        <MaterialCommunityIcons name="image-multiple" color="#24366F" size={70} />
-                        <Text style={styles.buttonText}>Media</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.prompts} onPress={handlePrompts}>
-                        <MaterialCommunityIcons name="message-text-outline" color="#24366F" size={70} />
-                        <Text style={styles.buttonText}>Prompts</Text>
-                    </TouchableOpacity>
+            <ImageBackground source={require('../../assets/background.png')} style={styles.background}>
+                <View style={styles.header}>
+                    <Image style={styles.friendPic} source={{ uri: friendImg }} />
+                    <Text style={styles.friendUsername}>@{friendName}</Text>
+                    <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}><FontAwesome name="chevron-left" size={30} color='#23356F' /></TouchableOpacity>
                 </View>
-            </View>
+                <View style={styles.chat}>
+                    <GiftedChat
+                        messages={messages}
+                        onSend={sendMessage}
+                        renderBubble={renderBubble}
+                        alwaysShowSend
+                        scrollToBottom
+                        scrollToBottomComponent={renderScrolltoBottom}
+                        renderSend={renderSend}
+                        renderMessageImage={renderMessageImage}
+                        renderMessageVideo={renderMessageVideo}
+                        user={{
+                            _id: currentUserID,
+                            avatar: userProfile,
+                            name: username
+                        }}
+                    />
+                    <View style={styles.bottomOptions}>
+                        <TouchableOpacity style={styles.imagePicker} onPress={handleMedia}>
+                            <MaterialCommunityIcons name="image-multiple" color="#24366F" size={50} />
+                            <Text style={styles.buttonText}>Media</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.prompts} onPress={handlePrompts}>
+                            <MaterialCommunityIcons name="message-text-outline" color="#24366F" size={50} />
+                            <Text style={styles.buttonText}>Prompts</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+            </ImageBackground>
         </View>
 
     );
@@ -344,29 +347,35 @@ const Chat = ({ route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E2E6F3',
+        backgroundColor: '#6D7EB6',
         justifyContent: 'center',
         alignItems: 'center'
     },
     header: {
         flex: 1,
-        backgroundColor: '#E2E6F3',
-        height: 1,
         width: '100%',
         justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: 40,
+        overflow: 'hidden',
+        marginBottom: -50
     },
     chat: {
-        flex: 3,
+        flex: 4,
         width: "100%",
-        backgroundColor: '#F3F3F3'
+    },
+    background: {
+        height: '100%',
+        width: '100%',
+        marginTop: 100,
+        borderRadius: 40,
+        overflow: 'hidden',
     },
     friendPic: {
-        height: 100,
-        width: 100,
+        height: 80,
+        width: 80,
+        marginTop: -30,
         marginBottom: 5,
-        marginTop: 30,
         borderRadius: 100
     },
     friendUsername: {
@@ -405,7 +414,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
-        marginBottom: 15
+        marginBottom: 50
     }
 
 });
