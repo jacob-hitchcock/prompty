@@ -130,7 +130,7 @@ const Chat = ({route}) => {
           return;
         }
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [1, 1],
             quality: 1,
@@ -140,6 +140,8 @@ const Chat = ({route}) => {
           if (!result.canceled) {
                 const res = await fetch(result.assets[0].uri).catch((error) => {
                 console.log("Error: " + error);
+                const uri = result.assets[0].uri;
+                console.log(uri)
             });
              // ChatGPT helped with this block
             let mediaURL = '';
