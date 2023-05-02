@@ -86,7 +86,7 @@ const Chats = () => {
         if(friendsArr.length < 1) {
             return (
                 <View style={{ flex: 1,width: '100%',alignItems: 'center' }}>
-                    <Text style={{ fontSize: 16,color: '#23356F',textAlign: 'center',marginTop: 50 }}>No Current Chats, Add Contacts to Get Started!</Text>
+                    <Text style={{ fontSize: 15,color: '#23356F',textAlign: 'center',marginTop: 15 }}>No Current Chats, Add Contacts to Get Started!</Text>
                 </View>
             )
         } else {

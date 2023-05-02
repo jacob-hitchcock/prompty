@@ -35,7 +35,7 @@ const Requests = () => {
                     <View style={{ position: 'relative',marginLeft: 15 }}>
                         <ImageBackground style={styles.card} source={{ uri: currentReq.senderPhotoURL }}>
                         </ImageBackground>
-                        <Text style={{ marginTop: 5,marginLeft: 15,fontSize: 20,fontWeight: 'bold',color: '#23356F' }}>@{currentReq.senderDisplayName}</Text>
+                        <Text style={{ marginTop: 5,marginLeft: 50,fontSize: 20,fontWeight: 'bold',color: '#23356F' }}>@{currentReq.senderDisplayName}</Text>
                     </View>
                     <View style={{ marginTop: -30,flex: 1,alignItems: 'center' }}>
                         <TouchableOpacity style={{ backgroundColor: '#23356F',padding: 10,borderRadius: 5,width: '80%',height: 57,justifyContent: 'center' }} onPress={() => handleAccept(currentReq)}>
