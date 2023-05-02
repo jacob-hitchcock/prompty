@@ -47,6 +47,7 @@ const Requests = () => {
                         </Text>
                         </TouchableOpacity>
                     </View>
+                    <Text style={{ fontSize: 20,fontWeight: 'bold',textAlign: 'center',color: '#24366F' }}>@{currentReq.senderDisplayName}</Text>
                 </View>
             );
         });
@@ -98,7 +99,8 @@ const Requests = () => {
         const chats = collection(promptyDB,'chats');
         await addDoc(chats,{
             participant1: currentUser,
-            participant2: sender
+            participant2: sender,
+            prompts: []
         });
 
         // deletes request because it was accepted

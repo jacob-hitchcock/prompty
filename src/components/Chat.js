@@ -13,18 +13,20 @@ import { Ionicons,MaterialCommunityIcons } from '@expo/vector-icons';
 import { Input } from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import { Alert } from 'react-native';
 
 
 const Chat = ({ route }) => {
     const user = getAuth().currentUser;
     const userProfile = user.photoURL;
     const username = user.displayName;
-
-    const { usersChatRef,messagesCollectionRef,usersChatData,currentUserID,friendID,friendImg,friendName } = route.params;
+    const { usersChatRef,messagesCollectionRef,
+        usersChatData,currentUserID,friendID,
+        friendImg,friendName } = route.params;
 
     const navigation = useNavigation();
     const [messages,setMessages] = useState({});
-    const [chatMedia,setChatMedia] = useState('');
+    //const [chatMedia, setChatMedia] = useState('');
 
     // I wrote this effect hook myself and chatGPT helped me debug an undetected error with setMessages
     useEffect(() => {
@@ -32,7 +34,6 @@ const Chat = ({ route }) => {
         const unsubscribe = onSnapshot(messagesQuery,(snapshot) => {
             const messages = snapshot.docs.map(doc => {
                 const messageToBePushed = { id: doc.id,...doc.data() };
-                // Remove the extra quotes around date and namestring
                 messageToBePushed.createdAt = messageToBePushed.createdAt.slice(1,-1);
                 return messageToBePushed;
             });
@@ -43,6 +44,7 @@ const Chat = ({ route }) => {
 
     async function sendMessage(newMessages = []) {
         const newMessage = newMessages[0];
+        //console.log(newMessage)
         let messageDoc = {
             senderID: currentUserID,
             recipientID: friendID,
@@ -50,30 +52,20 @@ const Chat = ({ route }) => {
             type: 'non-prompt',
             ...newMessage
         }
-
-        // ChatGPT helped with this block
-        let mediaURL = '';
-        if(chatMedia) { // result.assets[0].uri
-            const blob = await chatMedia.blob();
-            const mediaCollectionRef = ref(promptyStorage,"chatMedia");
-            const mediaRef = ref(mediaCollectionRef,`${newMessage._id}`);
-            uploadBytes(mediaRef,blob).then(async (snapshot) => {
-                mediaURL = await getDownloadURL(mediaRef);
-                console.log(messageDoc)
-                console.log(mediaURL)
-            }).catch((error) => {
-                console.log("Error: " + error);
-            });
-        }
-        //console.log(messageDoc);
         const dateAsString = JSON.stringify(messageDoc.createdAt);
         messageDoc.createdAt = dateAsString;
-        messageDoc.mediaURL = mediaURL;
         await addDoc(messagesCollectionRef,messageDoc);
     }
 
     async function handlePrompts() {
-        console.log("prompty")
+        /* Might use this for later for storing promptID in chat array "prompts"
+            // to check whether a prompt has already been used. If so, generate another one
+        const chatsCollectionRef = collection(promptyDB, "chats");
+        const chatQuery = query(chatsCollectionRef, where("participant1", "in", [currentUserID, friendID]), where("participant2", "in", [currentUserID, friendID]));
+        const queryDoc = await getDocs(chatQuery);
+        const usersChatRef = queryDoc.docs.map((doc) => doc)[0].ref;
+        const usersChatData = queryDoc.docs.map((doc) => doc)[0].data();
+        const promptArray = usersChatData.prompts; */
         const promptCollectionRef = collection(promptyDB,"prompts");
         const promptDocs = await getDocs(promptCollectionRef).then((snapshot) => {
             let prompts = [];
@@ -89,15 +81,49 @@ const Chat = ({ route }) => {
         // consulted ChatGPT for random number generation
         const randomPromptIndex = Math.floor(Math.random() * promptDocs.length);
         const randomPrompt = promptDocs[randomPromptIndex];
-        console.log(randomPrompt.prompt)
         const randomPromptText = randomPrompt.prompt;
         const randomPromptId = randomPrompt.id;
-        console.log(randomPromptId + ": " + randomPromptText);
-        ;
+        //console.log(randomPromptId + ": " + randomPromptText);
+        Alert.alert(
+            'Send Prompt?',
+            `${randomPromptText}`,
+            [{ text: 'Cancel',onPress: () => console.log('Cancel Pressed') },
+            { text: 'Send',onPress: () => sendPrompt(randomPromptId,randomPromptText) }
+            ],
+        );
+    }
+
+    async function sendPrompt(randomPromptId,randomPromptText) {
+        const user = {
+            _id: currentUserID,
+            avatar: userProfile,
+            name: username
+        }
+        const currentTime = new Date();
+        const formattedTime = currentTime.toISOString();
+
+        // chatGPT helped with generating randomID with timestamp
+        // and random number
+        const timestamp = new Date().getTime();
+        const randomNumber = Math.floor(Math.random() * 1000000);
+        const uniqueId = `${timestamp}-${randomNumber}`;
+        const promptDoc = {
+            _id: uniqueId,
+            createdAt: JSON.stringify(formattedTime),
+            text: randomPromptText,
+            type: 'prompt',
+            user: user
+        }
+        await addDoc(messagesCollectionRef,promptDoc);
     }
 
     // ChatGPT helped with this function
-    async function handleImages() {
+    async function handleMedia() {
+        const user = {
+            _id: currentUserID,
+            avatar: userProfile,
+            name: username
+        }
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync().catch((error) => {
             console.log("Error: " + error);
         });
@@ -105,9 +131,8 @@ const Chat = ({ route }) => {
             alert('Permission to access media library is required!');
             return;
         }
-        // Opens camera roll library, allows user to select image
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [1,1],
             quality: 1,
@@ -117,45 +142,125 @@ const Chat = ({ route }) => {
         if(!result.canceled) {
             const res = await fetch(result.assets[0].uri).catch((error) => {
                 console.log("Error: " + error);
+                const uri = result.assets[0].uri;
+                console.log(uri)
             });
-            setChatMedia(res);
+            // ChatGPT helped with this block
+            let mediaURL = '';
+
+            // Consulted ChatGPT to generate random, unique ID
+            const timestamp = new Date().getTime();
+            const randomNumber = Math.floor(Math.random() * 1000000);
+            const uniqueId = `${timestamp}-${randomNumber}`;
+            const currentTime = new Date();
+            const formattedTime = currentTime.toISOString();
+
+            const blob = await res.blob();
+            const mediaCollectionRef = ref(promptyStorage,"chatMedia");
+            const mediaRef = ref(mediaCollectionRef,uniqueId);
+            uploadBytes(mediaRef,blob).then(async (snapshot) => {
+                mediaURL = await getDownloadURL(mediaRef);
+                //console.log(mediaURL)
+                const mediaDoc = {
+                    _id: uniqueId,
+                    createdAt: JSON.stringify(formattedTime),
+                    content: mediaURL,
+                    user: user
+                }
+                await addDoc(messagesCollectionRef,mediaDoc);
+            }).catch((error) => {
+                console.log("Error: " + error);
+            });
         }
     }
-    //ChatGPT helped with styling
+
+    //ChatGPT helped with styling. 
+    // I chose the styling, but it helped me learn the format
     function renderBubble(props) {
-        console.log("current: " + props.currentMessage.type);
-        return (
-            <Bubble {...props}
-                wrapperStyle={{
-                    right: {
-                        backgroundColor: '#23356F',
-                        borderRadius: 15,
-                        marginBottom: 5,
-                        borderTopRightRadius: 15,
-                        borderTopLeftRadius: 15,
-                        borderBottomRightRadius: 15
-                    },
-                    left: {
-                        backgroundColor: '#E2E6F3',
-                        borderRadius: 15,
-                        marginBottom: 5,
-                        borderTopRightRadius: 15,
-                        borderTopLeftRadius: 15,
-                        borderBottomLeftRadius: 15
-                    },
-                }}
-                textStyle={{
-                    right: {
-                        color: '#E2E6F3',
-                        fontFamily: 'Helvetica',
-                    },
-                    left: {
-                        color: '#23356F',
-                        fontFamily: 'Helvetica',
-                    },
-                }}
-            />
-        );
+
+        if(props.currentMessage.type === "prompt") {
+            return (
+                <Bubble {...props}
+                    wrapperStyle={{
+                        right: {
+                            backgroundColor: '#23356F',
+                            borderRadius: 15,
+                            marginBottom: 5,
+                            borderTopRightRadius: 15,
+                            borderTopLeftRadius: 15,
+                            borderBottomRightRadius: 15,
+                            height: 100,
+                            justifyContent: 'center'
+                        },
+                        left: {
+                            backgroundColor: '#0084ff',
+                            borderRadius: 15,
+                            marginBottom: 5,
+                            borderTopRightRadius: 15,
+                            borderTopLeftRadius: 15,
+                            borderBottomLeftRadius: 15,
+                            height: 100,
+                            justifyContent: 'center'
+                        },
+                    }}
+                    textStyle={{
+                        right: {
+                            color: 'white',
+                            fontFamily: 'Helvetica',
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                        },
+                        left: {
+                            color: 'white',
+                            fontFamily: 'Helvetica',
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                        },
+                    }}
+                />
+            );
+        } else if(props.currentMessage.content) {
+            return (
+                <Image style={{ width: 200,height: 200,borderRadius: 15,marginBottom: 5 }}
+                    source={{ uri: props.currentMessage.content }} />
+            );
+        } else if(props.currentMessage.content) {
+        } else {
+            return (
+                <Bubble {...props}
+                    wrapperStyle={{
+                        right: {
+                            backgroundColor: '#6D7EB6',
+                            borderRadius: 15,
+                            marginBottom: 5,
+                            borderTopRightRadius: 15,
+                            borderTopLeftRadius: 15,
+                            borderBottomRightRadius: 15,
+                            justifyContent: 'center'
+                        },
+                        left: {
+                            backgroundColor: '#E2E6F3',
+                            borderRadius: 15,
+                            marginBottom: 5,
+                            borderTopRightRadius: 15,
+                            borderTopLeftRadius: 15,
+                            borderBottomLeftRadius: 15,
+                            justifyContent: 'center'
+                        },
+                    }}
+                    textStyle={{
+                        right: {
+                            color: 'white',
+                            fontFamily: 'Helvetica',
+                        },
+                        left: {
+                            color: '#23356F',
+                            fontFamily: 'Helvetica',
+                        },
+                    }}
+                />
+            );
+        }
     }
 
     function renderSend(props) {
@@ -167,6 +272,29 @@ const Chat = ({ route }) => {
             </Send>
         );
     }
+
+    // ChatGPT helped with rendering images
+    function renderMessageImage(props) {
+        return (
+            <Image
+                source={{ uri: props.currentMessage.image }}
+                style={{ width: 200,height: 200 }}
+                resizeMode="cover"
+            />
+        );
+    };
+
+    // ChatGPT helped with rendering videos
+    function renderMessageVideo(props) {
+        return (
+            <Video
+                source={{ uri: props.currentMessage.video }}
+                style={{ width: 200,height: 200 }}
+                resizeMode="cover"
+                controls={true}
+            />
+        );
+    };
 
     function renderScrolltoBottom() {
         return (
@@ -189,6 +317,8 @@ const Chat = ({ route }) => {
                     scrollToBottom
                     scrollToBottomComponent={renderScrolltoBottom}
                     renderSend={renderSend}
+                    renderMessageImage={renderMessageImage}
+                    renderMessageVideo={renderMessageVideo}
                     user={{
                         _id: currentUserID,
                         avatar: userProfile,
@@ -196,19 +326,16 @@ const Chat = ({ route }) => {
                     }}
                 />
                 <View style={styles.bottomOptions}>
-                    <TouchableOpacity style={styles.imagePicker} onPress={handleImages}>
+                    <TouchableOpacity style={styles.imagePicker} onPress={handleMedia}>
                         <MaterialCommunityIcons name="image-multiple" color="#24366F" size={70} />
                         <Text style={styles.buttonText}>Media</Text>
                     </TouchableOpacity>
-
                     <TouchableOpacity style={styles.prompts} onPress={handlePrompts}>
                         <MaterialCommunityIcons name="message-text-outline" color="#24366F" size={70} />
                         <Text style={styles.buttonText}>Prompts</Text>
                     </TouchableOpacity>
                 </View>
-
             </View>
-
         </View>
 
     );
