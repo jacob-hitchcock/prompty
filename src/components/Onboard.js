@@ -10,17 +10,17 @@ const Onboard = () => {
         {
             image: require('../../assets/prompty.png'),
             title: 'Prompty',
-            description: 'Conversation Starters Made for You',
+            description: 'Never be at a loss of words with your distant family',
         },
         {
             image: require('../../assets/prompty.png'),
             title: 'Prompty',
-            description: 'With daily prompts you can get to know your family members past the surface',
+            description: 'Connet with given one-on-one chat prompts',
         },
         {
             image: require('../../assets/prompty.png'),
             title: 'Prompty',
-            description: 'Sign up to get started on building your relationships',
+            description: 'Build your relationships to bridge the inter-generational gap',
         },
     ];
     const navigation = useNavigation();

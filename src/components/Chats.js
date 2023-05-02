@@ -1,7 +1,8 @@
-import React, { useState, useEffect} from 'react';
-import Navbar from './Navbar';
-import { StyleSheet,View,Text,ImageBackground,Image,TouchableOpacity,TextInput, ScrollView , Button} from 'react-native';
-import { doc, getDoc, updateDoc, get, query, where, collection, getDocs, setDoc, addDoc, deleteDoc} from "firebase/firestore";
+import React,{ useState,useEffect } from 'react';
+import Account from './Account';
+import Contacts from './Contacts';
+import { StyleSheet,View,Text,ImageBackground,Image,TouchableOpacity,TextInput,ScrollView,Button } from 'react-native';
+import { doc,getDoc,updateDoc,get,query,where,collection,getDocs,setDoc,addDoc,deleteDoc } from "firebase/firestore";
 import { promptyDB } from '../../firebase';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -9,91 +10,95 @@ import Icons from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { getAuth } from "firebase/auth";
 
- const fakeFriends = [{friend: "RuIDqCW1bbb3APY7oeBfpf3XVIy1", friendDisplayName: "Travondragon", friendPhotoUrl: "https//firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2FRuIDqCW1bbb3APY7oeBfpf3XVIy1?alt=media&token=c22b3520-4797-4bd9-af6c-cb7a5275587c"}];
+const fakeFriends = [{ friend: "RuIDqCW1bbb3APY7oeBfpf3XVIy1",friendDisplayName: "Travondragon",friendPhotoUrl: "https//firebasestorage.googleapis.com/v0/b/prompty-7a544.appspot.com/o/profilePictures%2FRuIDqCW1bbb3APY7oeBfpf3XVIy1?alt=media&token=c22b3520-4797-4bd9-af6c-cb7a5275587c" }];
 
- // fetch someone's friend list array, which should have each friend's user ID
- // using each user ID, render each person's name and profile pic
- // rows of two
-
+// fetch someone's friend list array, which should have each friend's user ID
+// using each user ID, render each person's name and profile pic
+// rows of two
 const Chats = () => {
-    const [chats, setChats] = useState([]);
+
+    const handleThisPress = () => {
+        navigation.navigate('Account');
+    }
+    const [chats,setChats] = useState([]);
     useEffect(async () => {
         const data = await getFriends();
         setChats(data);
-        }, []);
+    },[]);
 
     const navigation = useNavigation();
 
     async function handleChat(friend) {
         const friendID = friend.friend;
         const userID = getAuth().currentUser.uid;
-        const chatsCollectionRef = collection(promptyDB, "chats");
+        const chatsCollectionRef = collection(promptyDB,"chats");
 
-        const chatQuery = query(chatsCollectionRef, where("participant1", "in", [userID, friendID]), where("participant2", "in", [userID, friendID]));
+        const chatQuery = query(chatsCollectionRef,where("participant1","in",[userID,friendID]),where("participant2","in",[userID,friendID]));
 
         const queryDoc = await getDocs(chatQuery);
-    
+
         const usersChatRef = queryDoc.docs.map((doc) => doc)[0].ref;
         const usersChatData = queryDoc.docs.map((doc) => doc)[0].data();
         //console.log(usersChatData)
         //await updateDoc(usersChatRef, {text: "Travvy you did it!"})
-        const messagesCollectionRef = collection(usersChatRef, "messages");
-        
-    // for adding new messages
-       //await addDoc(messagesCollectionRef, {test: "travvy u did it again!"})
-       // important variables to send to chat component as prop
-       // data = userschatdata, sender = userID, recipient= friendID
-       // send ref?
-       navigation.navigate("Chat", {
-        usersChatRef: usersChatRef,
-        messagesCollectionRef: messagesCollectionRef,
-        usersChatData: usersChatData,
-        currentUserID: userID,
-        friendID: friendID,
-        friendImg: friend.friendPhotoURL,
-        friendName: friend.friendDisplayName
-       });
+        const messagesCollectionRef = collection(usersChatRef,"messages");
+
+        // for adding new messages
+        //await addDoc(messagesCollectionRef, {test: "travvy u did it again!"})
+        // important variables to send to chat component as prop
+        // data = userschatdata, sender = userID, recipient= friendID
+        // send ref?
+        navigation.navigate("Chat",{
+            usersChatRef: usersChatRef,
+            messagesCollectionRef: messagesCollectionRef,
+            usersChatData: usersChatData,
+            currentUserID: userID,
+            friendID: friendID,
+            friendImg: friend.friendPhotoURL,
+            friendName: friend.friendDisplayName
+        });
     }
 
     const user = getAuth().currentUser;
     const userID = user.uid;
     async function getFriends() {
-        const friendsListCollection = collection(promptyDB, 'users', userID, 'friends');
+        const friendsListCollection = collection(promptyDB,'users',userID,'friends');
         const friendsList = await getDocs(friendsListCollection)
         let friendsArr = [];
         friendsList.forEach((friend) => {
             friendsArr.push(friend.data());
         });
-        //console.log(friendsArr)
         const friendCards = friendsArr.map((friend) => {
             return (
-                <View key={friend.id} style={{alignItems: 'center', width: '50%', marginBottom: 5, marginTop: 10}} >
-                    <View style={{ overflow: 'hidden', height: 170, width: 170, borderRadius: 15, position: 'relative'}}>
-                            <ImageBackground style={styles.card}source={{uri: friend.friendPhotoURL}}>
-                                <TouchableOpacity style={styles.chatButton} onPress={() => handleChat(friend)}>
-                                    <Text style={styles.chatButtonText}>Chat</Text>
-                                </TouchableOpacity>
-                            </ImageBackground>
-                        </View>
-                        <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center', color: '#24366F', marginTop: 5}}>@{friend.friendDisplayName}</Text>
+                <View key={friend.id} style={{ alignItems: 'center',width: '50%',marginBottom: 5,marginTop: 10 }} >
+                    <View style={{ overflow: 'hidden',height: 170,width: 170,borderRadius: 15,position: 'relative' }}>
+                        <ImageBackground style={styles.card} source={{ uri: friend.friendPhotoURL }}>
+                            <TouchableOpacity style={styles.chatButton} onPress={() => handleChat(friend)}>
+                                <Text style={styles.chatButtonText}>Chat</Text>
+                            </TouchableOpacity>
+                        </ImageBackground>
                     </View>
+                    <Text style={{ fontSize: 20,fontWeight: 'bold',textAlign: 'center',color: '#24366F',marginTop: 5 }}>@{friend.friendDisplayName}</Text>
+                </View>
             );
         });
         //console.log(friendCards);
         return friendCards;
     }
-    
+
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                
-        <Text style={{ flex: 1, fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginTop: 25 }}>Chats</Text>
-
+            <View style={styles.appContainer}>
+                <ImageBackground source={require('../../assets/background.png')} style={styles.background}>
+                    <View style={styles.profile}>
+                        <Account />
+                    </View>
+                    <Text style={{ marginTop: -5,marginLeft: 15,fontWeight: 'bold',fontSize: 35,color: '#24366F' }}>Chats</Text>
+                    <ScrollView style={styles.scroll} contentContainerStyle={{ flexDirection: 'row',flexWrap: 'wrap' }}>
+                        {chats}
+                    </ScrollView>
+                </ImageBackground>
             </View>
-            <ScrollView style={styles.scroll} contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                {chats}
-            </ScrollView>
-            <Navbar />
         </View>
     )
 };
@@ -101,17 +106,20 @@ const Chats = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E2E6F3'
+        backgroundColor: '#6D7EB6',
+        height: '100%'
     },
-    header: {
-        flexDirection: 'row', 
-        alignItems: 'center', 
-        height: 80, 
-        backgroundColor: '#f0f0f0', 
-        justifyContent: 'center' 
+    appContainer: {
+        flex: 1,
+        height: '100%',
+    },
+    background: {
+        height: '100%',
+        marginTop: 50,
+        borderRadius: 40,
+        overflow: 'hidden',
     },
     scroll: {
-        marginTop: 10,
         marginBottom: 100
     },
     card: {
@@ -127,12 +135,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         top: 120,
         left: 10
-    }, 
+    },
     chatButtonText: {
         color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
+    },
+    profile: {
+        marginTop: 20,
     }
 });
 

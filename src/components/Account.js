@@ -1,23 +1,22 @@
 import React,{ useState } from 'react';
 import { StyleSheet,View,Text,ImageBackground,Image,TouchableOpacity,TextInput } from 'react-native';
-import Navbar from './Navbar';
-import { getAuth, updateProfile } from 'firebase/auth';
-import { authentication, promptyDB, promptyStorage } from "../../firebase";
-import { doc, getDoc, updateDoc, get, addDoc, collection, getDocs } from "firebase/firestore";
+import { getAuth,updateProfile } from 'firebase/auth';
+import { authentication,promptyDB,promptyStorage } from "../../firebase";
+import { doc,getDoc,updateDoc,get,addDoc,collection,getDocs } from "firebase/firestore";
 import * as ImagePicker from 'expo-image-picker';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { getDownloadURL,ref,uploadBytes } from 'firebase/storage';
+import { useNavigation,useRoute } from '@react-navigation/native';
 
 const Account = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const auth = getAuth();
     const user = auth.currentUser;
-    if (user) {
+    if(user) {
         displayName = user.displayName;
     }
 
-    const [image, setImage] = useState(user.photoURL);
+    const [image,setImage] = useState(user.photoURL);
     /*async function getPrompts() {
         const promptSnapshot = await getDocs(collection(promptyDB, "prompts"));
    
@@ -28,40 +27,44 @@ const Account = () => {
     console.log(promptSnapshot.size)
     }
     getPrompts(); */
-    
-    
-  /* prompts.forEach(async (currentPrompt)=> {
-        await addDoc(collection(promptyDB, "prompts"), {
-            prompt: currentPrompt
-        })
-    }); */
+
+
+    /* prompts.forEach(async (currentPrompt)=> {
+          await addDoc(collection(promptyDB, "prompts"), {
+              prompt: currentPrompt
+          })
+      }); */
 
     function handleRequests() {
         navigation.navigate('Requests');
     }
-   
+
+    function handleContact() {
+        navigation.navigate('Contacts')
+    }
+
     // ChatGPT to help with getting image from camera roll
     async function pickImage() {
         // Asking for permission
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync().catch((error) => {
             console.log("Error: " + error);
-           });
-        if (status !== 'granted') {
-          alert('Permission to access media library is required!');
-          return;
+        });
+        if(status !== 'granted') {
+            alert('Permission to access media library is required!');
+            return;
         }
         // Opens camera roll library, allows user to select image
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [1, 1],
+            aspect: [1,1],
             quality: 1,
-          }).catch((error) => {
+        }).catch((error) => {
             console.log("Error: " + error);
-           });
-        
-           // If they didn't cancel (if they chose a picture)
-          if (!result.canceled) {
+        });
+
+        // If they didn't cancel (if they chose a picture)
+        if(!result.canceled) {
 
             // Take the uri of selected image 
             // (accessed through result.asset's value, which is an array containing a single object, which has a uri attribute)
@@ -71,125 +74,107 @@ const Account = () => {
             // make a blob of that (file)
             const blob = await res.blob();
 
-           // create storage reference (this is where you WANT to store the image)
-           /* I decided to store it inside a folder called 'profilePictures' and 
-           name each image after the unique userID of that person */
-           const profilePictureCollectionRef = ref(promptyStorage, "profilePictures");
-           const profilePictureRef = ref(profilePictureCollectionRef, user.uid);
+            // create storage reference (this is where you WANT to store the image)
+            /* I decided to store it inside a folder called 'profilePictures' and 
+            name each image after the unique userID of that person */
+            const profilePictureCollectionRef = ref(promptyStorage,"profilePictures");
+            const profilePictureRef = ref(profilePictureCollectionRef,user.uid);
 
-           uploadBytes(profilePictureRef, blob).then((snapshot) => {
-            //console.log('uploaded image');
-           }).catch((error) => {
-            console.log("Error: " + error);
-           });
-           // Want to save the URL of the newly uploaded image
-           getDownloadURL(profilePictureRef).then((url) => {
+            uploadBytes(profilePictureRef,blob).then((snapshot) => {
+                //console.log('uploaded image');
+            }).catch((error) => {
+                console.log("Error: " + error);
+            });
+            // Want to save the URL of the newly uploaded image
+            getDownloadURL(profilePictureRef).then((url) => {
                 // saves it in user's photoURL attribute
-                updateProfile(user, {
+                updateProfile(user,{
                     photoURL: url
                 }).then(() => {
                     //console.log("photo updated");
                 }).catch((error) => {
                     console.error("Error updating profile url: " + error);
                 });
-           }).catch((error) => {
-            console.log("error: " + error);
-           });
-/* 
-const mediaCollectionRef = ref(promptyStorage, "chatMedia");
-            const mediaRef = ref(mediaCollectionRef, `${newMessage._id}`);
-
-*/
-        /* Save it in document representing user, to render their profile 
-           picture for other users when they search and view their profile */
-        const userDoc = doc(promptyDB, "users", user.uid);
-        await updateDoc(userDoc, {
-            profilePictureUrl: user.photoURL
-        })
-        // Re-renders photo component on account page
-        //console.log("user.photoURL: ", user.photoURL);
-        setImage(user.photoURL);
+            }).catch((error) => {
+                console.log("error: " + error);
+            });
+            /* 
+            const mediaCollectionRef = ref(promptyStorage, "chatMedia");
+                        const mediaRef = ref(mediaCollectionRef, `${newMessage._id}`);
+            
+            */
+            /* Save it in document representing user, to render their profile 
+               picture for other users when they search and view their profile */
+            const userDoc = doc(promptyDB,"users",user.uid);
+            await updateDoc(userDoc,{
+                profilePictureUrl: user.photoURL
+            })
+            // Re-renders photo component on account page
+            //console.log("user.photoURL: ", user.photoURL);
+            setImage(user.photoURL);
         }
     }
-  
+
     let imgSrc;
-    if (user) {
+    if(user) {
         //(user.photoURL);
         imgSrc = user.photoURL;
     } else {
         imgSrc = '../../assets/placeholder.png'
     }
-    
-   //  <Image source={require('../../assets/placeholder.png')} style={styles.profilePicture} />
+
+    //  <Image source={require('../../assets/placeholder.png')} style={styles.profilePicture} />
     return (
         <View style={styles.container}>
-            <View style={styles.accountContainer}>
-                <ImageBackground source={require('../../assets/background.png')} style={styles.background}>
-                    <View style={styles.infoContainer}>
-
-                    <TouchableOpacity onPress={pickImage}>
-                    <Image source={{uri: image}} style={styles.profilePicture} />
-                    </TouchableOpacity>
-                    <Text style={styles.info}>{"@" + user.displayName}</Text>
-                    <View style={styles.separate}/>
-                        <TouchableOpacity style={styles.option}>
-                            <Text style={styles.optionFont}>User Settings</Text>
-                        </TouchableOpacity>
-                        <View style={styles.separate}/>
-                        <TouchableOpacity style={styles.option} onPress={handleRequests}>
-                            <Text style={styles.optionFont}>Friend Requests</Text>
-                        </TouchableOpacity>
-                        <View style={styles.separate}/>
-                        
-                    </View>
-                </ImageBackground>
+            <View style={styles.leftContainer}>
+                <TouchableOpacity onPress={pickImage}>
+                    <Image source={{ uri: image }} style={styles.profilePicture} />
+                </TouchableOpacity>
+                <Text style={styles.info}>{"@" + user.displayName}</Text>
             </View>
-            <Navbar />
+            <View style={styles.rightContainer}>
+                <View style={styles.separate} />
+                <TouchableOpacity style={styles.option} onPress={handleContact}>
+                    <Text style={styles.optionFont}>Add Contact</Text>
+                </TouchableOpacity>
+                <View style={styles.separate} />
+                <TouchableOpacity style={styles.option} onPress={handleRequests}>
+                    <Text style={styles.optionFont}>Friend Requests</Text>
+                </TouchableOpacity>
+                <View style={styles.separate} />
+            </View>
         </View>
     )
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#24366F',
+        flexDirection: 'row',
+        padding: 20
     },
-    background: {
+    leftContainer: {
         flex: 1,
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-    },
-    accountContainer: {
-        flex: 1,
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '95%',
-        borderWidth: 1,
-        borderColor: '#6D7EB6',
-        borderRadius: 50,
-        overflow: 'hidden',
-    },
-    infoContainer: {
-        flex: 1,
-        marginTop: 150,
+        flexDirection: 'column',
         alignItems: 'center',
     },
-    info: { 
+    rightContainer: {
+        flex: 1,
+        alignItems: 'center',
+        marginTop: 20
+    },
+    info: {
         fontSize: 20,
-        color: '#27292E',
+        color: '#24366F',
         marginBottom: 30,
         fontWeight: 'bold'
     },
     profilePicture: {
-        height: 265,
-        width: 265,
-        borderWidth: 15,
+        height: 150,
+        width: 150,
+        borderWidth: 10,
         borderColor: '#E2E6F3',
         borderRadius: 40,
-        marginBottom: 20,
+        marginBottom: 10,
     },
     editableText: {
         fontSize: 20,
@@ -208,8 +193,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#CCCCCC'
     },
     option: {
-        paddingTop: 20,
-        paddingBottom: 15,
+        paddingTop: 25,
+        paddingBottom: 25,
     },
     optionFont: {
         fontFamily: 'Arial',

@@ -3,8 +3,8 @@ import { View,Text,TextInput,TouchableOpacity,ImageBackground,Image,KeyboardAvoi
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { authentication, promptyDB } from '../../firebase';
-import { collection, addDoc } from "firebase/firestore";
+import { authentication,promptyDB } from '../../firebase';
+import { collection,addDoc } from "firebase/firestore";
 
 /*
 async function addUserDoc() {
@@ -23,24 +23,24 @@ async function addUserDoc() {
 
 // Defines the login components
 const Login = () => {
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [userInfo, setUserInfo] = useState([]);
-    const [email, setEmail] = useState(false);
-    const [password, setPassword] = useState('');
+    const [loggedIn,setLoggedIn] = useState(false);
+    const [userInfo,setUserInfo] = useState([]);
+    const [email,setEmail] = useState(false);
+    const [password,setPassword] = useState('');
     // Handles navigation
     const navigation = useNavigation();
 
     // Navigate to the Account page when the Login button is pressed
     // Probably change this to navigate somewhere else in the future
     const handleLoginPress = () => {
-        signInWithEmailAndPassword(authentication, email, password)
-        .then((res) => {
-            //console.log(res);
-            navigation.navigate('Chats');
-        })
-        .catch((res) => {
-            console.log(res);
-        })
+        signInWithEmailAndPassword(authentication,email,password)
+            .then((res) => {
+                //console.log(res);
+                navigation.navigate('Chats');
+            })
+            .catch((res) => {
+                console.log(res);
+            })
     }
 
     // Navigate to the Register page when the register button is pressed
@@ -81,9 +81,8 @@ const Login = () => {
                                     keyboardType='email-address'
                                     onSubmitEditing={() => { this.Password.focus(); }}
                                     blurOnSubmit={false}
-                                    onChangeText={text => setEmail(text)} 
+                                    onChangeText={text => setEmail(text)}
                                 />
-                                {/* Need to edit as password is covered by keyboard */}
 
 
                                 <TextInput
@@ -92,7 +91,7 @@ const Login = () => {
                                     placeholderTextColor='#878787'
                                     secureTextEntry={!showPassword}
                                     ref={(input) => { this.Password = input; }}
-                                    onChangeText={text => setPassword(text)} 
+                                    onChangeText={text => setPassword(text)}
                                 />
                                 <TouchableOpacity
                                     style={{ position: 'absolute',right: 10,top: 97 }}
@@ -113,9 +112,7 @@ const Login = () => {
                     <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
                         <Text style={styles.buttonText}>Sign In</Text>
                     </TouchableOpacity>
-                    
-                   
-                    {/* In the furture, more sign-in options will be here */}
+
                     <TouchableOpacity style={styles.registerContainer} onPress={handleRegisterPress}>
                         <Text style={styles.register}>New to Prompty? <Text style={styles.registerLink}>Join Now</Text></Text>
                     </TouchableOpacity>

@@ -37,13 +37,6 @@ const Navbar = () => {
                         size={42}
                     />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.icons} onPress={handleAccountPress}>
-                    <Icon
-                        name={'user-alt'}
-                        color={route.name === 'Account' ? '#24366F' : '#C7C7C7'}
-                        size={42}
-                    />
-                </TouchableOpacity>
             </View>
         </View>
     )
@@ -58,7 +51,6 @@ const styles = StyleSheet.create({
         height: 90,
         backgroundColor: '#FFFFFF',
         borderRadius: 50,
-        overflow: 'hidden',
         justifyContent: 'center',
         alignItems: 'center',
     },
