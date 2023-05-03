@@ -30,7 +30,10 @@ Any indiviual(s) wishing to continue this project should begin by fixing the tin
 
 ## URL’s: 
 Presentation Deck:  https://tinyurl.com/promptypresentation
+
 Final Product:      https://github.com/jacob-hitchcock/prompty
+
 Github repo:        https://github.com/jacob-hitchcock/prompty
+
 Landing page:       https://soniadashti.github.io/promptypage/
-		                https://github.com/soniadashti/promptypage
+		    https://github.com/soniadashti/promptypage
