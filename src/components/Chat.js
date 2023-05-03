@@ -84,7 +84,7 @@ const Chat = ({ route }) => {
         const randomPromptId = randomPrompt.id;
         //console.log(randomPromptId + ": " + randomPromptText);
         Alert.alert(
-            'Prompt?',
+            'Prompt',
             `${randomPromptText}`,
             [{ text: 'Cancel',onPress: () => console.log('Cancel Pressed') },
             { text: 'Send',onPress: () => sendPrompt(randomPromptId,randomPromptText) }
