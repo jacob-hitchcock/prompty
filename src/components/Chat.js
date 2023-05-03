@@ -1,7 +1,6 @@
 import React,{ useState,useEffect } from 'react';
 import { GiftedChat,InputToolbar,ChatInput,SendButton,Bubble,Send } from 'react-native-gifted-chat';
 import { StyleSheet,View,Text,ImageBackground,Image,TouchableOpacity,TextInput,ScrollView,Button } from 'react-native';
-import Navbar from './Navbar';
 import { doc,getDoc,updateDoc,get,query,where,collection,getDocs,setDoc,addDoc,deleteDoc,serverTimestamp,orderBy,limit,onSnapshot,QuerySnapshot } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { promptyDB,promptyStorage } from '../../firebase';
@@ -85,7 +84,7 @@ const Chat = ({ route }) => {
         const randomPromptId = randomPrompt.id;
         //console.log(randomPromptId + ": " + randomPromptText);
         Alert.alert(
-            'Send Prompt?',
+            'Prompt?',
             `${randomPromptText}`,
             [{ text: 'Cancel',onPress: () => console.log('Cancel Pressed') },
             { text: 'Send',onPress: () => sendPrompt(randomPromptId,randomPromptText) }

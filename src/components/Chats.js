@@ -1,6 +1,5 @@
 import React,{ useState,useEffect } from 'react';
 import Account from './Account';
-import Contacts from './Contacts';
 import { StyleSheet,View,Text,ImageBackground,Image,TouchableOpacity,TextInput,ScrollView,Button } from 'react-native';
 import { doc,getDoc,updateDoc,get,query,where,collection,getDocs,setDoc,addDoc,deleteDoc } from "firebase/firestore";
 import { promptyDB } from '../../firebase';
