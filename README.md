@@ -21,7 +21,7 @@ Travon Dao: **tdao09@uw.edu**
 Feel free to reach out to any of us with any questions. 
 
 ## This project will be open sourced effective June 9th, 2023.
-Any indiviual(s) wishing to continue this project should begin by fixing the tiny bugs that may arise in the application. Such bugs are profile picutre taking longer to load, friend requests sometime may require the app to refresh and the daily limit for media usage with firebase (currently operating at 1 GB per day). Further functionalities to enhance the mobile application can include video and voice memo upload, prompt answers to be hidden until both users reply, prompts are categorized and randamoized, inapp and push notifications, and further enhance the UI of the application.
+Any indiviual(s) wishing to continue this project should begin by fixing the tiny bugs that may arise in the application. Such bugs are profile picture taking longer to load, friend requests sometime may require the app to refresh and the daily limit for media usage with firebase (currently operating at 1 GB per day). Further functionalities to enhance the mobile application can include video and voice memo upload, prompt answers to be hidden until both users reply, prompts are categorized and randomized, in-app and push notifications, and further enhance the UI of the application.
 
 ## Personal email address for future communication:
 1) Neil Dadlani - dadlanineil7917@gmail.com
